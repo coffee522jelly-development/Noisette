@@ -19,6 +19,17 @@
   let levels = $state({ left: 0, right: 0 });
   let animationFrame: number;
 
+  const NOISE_OPTIONS: { value: NoiseType, label: string }[] = [
+    { value: 'white', label: 'White' },
+    { value: 'pink', label: 'Pink' },
+    { value: 'brown', label: 'Brown' },
+    { value: 'green', label: 'Green' },
+    { value: 'radio', label: 'Radio' },
+    { value: 'tape', label: 'Tape' },
+    { value: 'cafe', label: 'Cafe' },
+    { value: 'rain', label: 'Rain' },
+  ];
+
   onMount(() => {
     audioGen = new AudioGenerator();
     audioGen.setVolume(volume / 100);
@@ -139,38 +150,21 @@
     </div>
   </div>
 
-  <!-- Oscillator Panel -->
-  <div class="w-full mb-6">
+  <!-- Oscillator Panel (Expanded Grid) -->
+  <div class="w-full mb-6 relative">
     <h3 class="text-[10px] font-mono text-engraved uppercase tracking-[0.2em] border-b border-border/30 pb-1 mb-3 ml-2">Oscillator Source</h3>
-    <div class="flex justify-around items-center w-full bg-panel/30 p-4 rounded-md border border-border/20 shadow-inner">
-      <label class="flex flex-col items-center gap-3 cursor-pointer group">
-        <input type="radio" name="noiseType" value="white" bind:group={noiseType} class="peer sr-only" />
-        <div class="w-6 h-6 rounded-full border border-black/40 peer-checked:border-primary/50 shadow-[0_2px_4px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.2)] transition-all flex items-center justify-center bg-gradient-to-b from-[#e0e0e0] to-[#999] relative peer-active:scale-95">
-           <!-- Button physical center -->
-           <div class="w-4 h-4 rounded-full bg-background shadow-inner"></div>
-           <!-- LED -->
-           <div class="absolute -top-4 w-1.5 h-1.5 rounded-full bg-black/50 shadow-inner peer-checked:bg-accent peer-checked:shadow-[0_0_5px_var(--accent)] transition-colors"></div>
-        </div>
-        <span class="font-mono text-[9px] tracking-widest text-secondary group-hover:text-primary transition-colors">White</span>
-      </label>
-
-      <label class="flex flex-col items-center gap-3 cursor-pointer group">
-        <input type="radio" name="noiseType" value="pink" bind:group={noiseType} class="peer sr-only" />
-        <div class="w-6 h-6 rounded-full border border-black/40 peer-checked:border-primary/50 shadow-[0_2px_4px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.2)] transition-all flex items-center justify-center bg-gradient-to-b from-[#e0e0e0] to-[#999] relative peer-active:scale-95">
-           <div class="w-4 h-4 rounded-full bg-background shadow-inner"></div>
-           <div class="absolute -top-4 w-1.5 h-1.5 rounded-full bg-black/50 shadow-inner peer-checked:bg-accent peer-checked:shadow-[0_0_5px_var(--accent)] transition-colors"></div>
-        </div>
-        <span class="font-mono text-[9px] tracking-widest text-secondary group-hover:text-primary transition-colors">Pink</span>
-      </label>
-
-      <label class="flex flex-col items-center gap-3 cursor-pointer group">
-        <input type="radio" name="noiseType" value="brown" bind:group={noiseType} class="peer sr-only" />
-        <div class="w-6 h-6 rounded-full border border-black/40 peer-checked:border-primary/50 shadow-[0_2px_4px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.2)] transition-all flex items-center justify-center bg-gradient-to-b from-[#e0e0e0] to-[#999] relative peer-active:scale-95">
-           <div class="w-4 h-4 rounded-full bg-background shadow-inner"></div>
-           <div class="absolute -top-4 w-1.5 h-1.5 rounded-full bg-black/50 shadow-inner peer-checked:bg-accent peer-checked:shadow-[0_0_5px_var(--accent)] transition-colors"></div>
-        </div>
-        <span class="font-mono text-[9px] tracking-widest text-secondary group-hover:text-primary transition-colors">Brown</span>
-      </label>
+    <div class="grid grid-cols-4 grid-rows-2 gap-y-4 gap-x-2 w-full bg-panel/30 p-4 rounded-md border border-border/20 shadow-inner">
+      {#each NOISE_OPTIONS as option}
+        <label class="flex flex-col items-center gap-2 cursor-pointer group">
+          <input type="radio" name="noiseType" value={option.value} bind:group={noiseType} class="peer sr-only" />
+          <div class="w-5 h-5 rounded-full border border-black/40 peer-checked:border-primary/50 shadow-[0_2px_4px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.2)] transition-all flex items-center justify-center bg-gradient-to-b from-[#e0e0e0] to-[#999] relative peer-active:scale-95">
+             <div class="w-3.5 h-3.5 rounded-full bg-background shadow-inner"></div>
+             <!-- LED Indicator -->
+             <div class="absolute -top-3 w-1.5 h-1.5 rounded-full bg-black/50 shadow-inner peer-checked:bg-accent peer-checked:shadow-[0_0_5px_var(--accent)] transition-colors"></div>
+          </div>
+          <span class="font-mono text-[8px] tracking-widest text-secondary group-hover:text-primary transition-colors">{option.label}</span>
+        </label>
+      {/each}
     </div>
   </div>
 
@@ -178,34 +172,35 @@
   <div class="w-full flex gap-4">
 
     <!-- Filter Section -->
-    <div class="flex-1">
+    <div class="flex-[3]">
       <h3 class="text-[10px] font-mono text-engraved uppercase tracking-[0.2em] border-b border-border/30 pb-1 mb-3 ml-2">Filters</h3>
-      <div class="flex justify-around items-center bg-panel/30 p-4 rounded-md border border-border/20 shadow-inner h-[110px]">
+      <div class="flex justify-around items-center bg-panel/30 p-4 rounded-md border border-border/20 shadow-inner h-[90px]">
         <Knob bind:value={highpass} min={20} max={5000} step={10} size={50} label="HPF" />
         <Knob bind:value={lowpass} min={500} max={20000} step={10} size={50} label="LPF" />
       </div>
     </div>
 
     <!-- Output Section -->
-    <div class="flex-1">
+    <div class="flex-[2]">
       <h3 class="text-[10px] font-mono text-engraved uppercase tracking-[0.2em] border-b border-border/30 pb-1 mb-3 ml-2">Output</h3>
-      <div class="flex justify-around items-center bg-panel/30 p-4 rounded-md border border-border/20 shadow-inner h-[110px] relative">
-        <Knob bind:value={volume} min={0} max={100} step={1} size={65} label="Level" />
-
-        <!-- Power Button -->
-        <div class="absolute top-1 right-2 flex flex-col items-center">
-           <button
-            class="w-10 h-10 rounded-full border border-black/40 {isPlaying ? 'bg-primary/20' : 'bg-gradient-to-b from-[#f0f0f0] to-[#b0b0b0]'} shadow-[0_4px_6px_rgba(0,0,0,0.6),inset_0_1px_1px_rgba(255,255,255,0.4)] flex items-center justify-center transition-all active:scale-95 active:shadow-[0_1px_2px_rgba(0,0,0,0.5)]"
-            onclick={togglePlay}
-            aria-label="Play"
-           >
-             <Power class="w-5 h-5 {isPlaying ? 'text-primary drop-shadow-[0_0_4px_var(--primary)]' : 'text-black/60'}" />
-           </button>
-           <div class="w-1.5 h-1.5 rounded-full mt-2 {isPlaying ? 'bg-accent shadow-[0_0_5px_var(--accent)]' : 'bg-black/50 shadow-inner'}"></div>
-        </div>
+      <div class="flex justify-center items-center bg-panel/30 p-4 rounded-md border border-border/20 shadow-inner h-[90px]">
+        <Knob bind:value={volume} min={0} max={100} step={1} size={60} label="Level" />
       </div>
     </div>
 
+  </div>
+
+  <!-- Main Power Button (Moved to Bottom Right) -->
+  <div class="absolute bottom-6 right-6 flex flex-col items-center">
+    <button
+     class="w-12 h-12 rounded-full border border-black/40 {isPlaying ? 'bg-primary/20' : 'bg-gradient-to-b from-[#f0f0f0] to-[#b0b0b0]'} shadow-[0_6px_8px_rgba(0,0,0,0.6),inset_0_1px_1px_rgba(255,255,255,0.4)] flex items-center justify-center transition-all active:scale-95 active:shadow-[0_1px_2px_rgba(0,0,0,0.5)] z-20"
+     onclick={togglePlay}
+     aria-label="Play"
+    >
+      <Power class="w-6 h-6 {isPlaying ? 'text-primary drop-shadow-[0_0_4px_var(--primary)]' : 'text-black/60'}" />
+    </button>
+    <div class="absolute -top-3 w-1.5 h-1.5 rounded-full {isPlaying ? 'bg-accent shadow-[0_0_5px_var(--accent)]' : 'bg-black/50 shadow-inner'} z-10"></div>
+    <span class="mt-2 text-[10px] font-mono text-engraved tracking-widest z-10">POWER</span>
   </div>
 
 </div>

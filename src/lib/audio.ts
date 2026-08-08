@@ -1,8 +1,9 @@
-export type NoiseType = 'white' | 'pink' | 'brown';
+export type NoiseType = 'white' | 'pink' | 'brown' | 'green' | 'radio' | 'tape' | 'cafe' | 'rain';
 
 export class AudioGenerator {
   private ctx: AudioContext | null = null;
   private noiseNode: AudioBufferSourceNode | null = null;
+  private greenBandpass: BiquadFilterNode | null = null; // Specific for Green Noise
   private gainNode: GainNode | null = null;
 
   private lowpassFilter: BiquadFilterNode | null = null;
@@ -39,6 +40,12 @@ export class AudioGenerator {
     this.highpassFilter.type = 'highpass';
     this.highpassFilter.frequency.value = this.currentHighpass;
 
+    // Green noise specific bandpass filter (simulating vocal range focus around 500Hz)
+    this.greenBandpass = this.ctx.createBiquadFilter();
+    this.greenBandpass.type = 'bandpass';
+    this.greenBandpass.frequency.value = 500;
+    this.greenBandpass.Q.value = 0.5;
+
     this.gainNode = this.ctx.createGain();
     this.gainNode.gain.value = this.currentVolume;
 
@@ -54,21 +61,21 @@ export class AudioGenerator {
     this.dataArrayLeft = new Uint8Array(this.bufferLength);
     this.dataArrayRight = new Uint8Array(this.bufferLength);
 
-    // Audio routing: highpass -> lowpass -> gain -> splitter -> analysers/destination
-    this.highpassFilter.connect(this.lowpassFilter);
-    this.lowpassFilter.connect(this.gainNode);
-    this.gainNode.connect(this.splitter);
-
-    this.splitter.connect(this.analyserLeft, 0);
-    // If mono, connect channel 0 to right analyser as well to show activity
-    this.splitter.connect(this.analyserRight, 1);
-
-    this.gainNode.connect(this.ctx.destination);
+    // Default Audio routing: highpass -> lowpass -> gain -> splitter -> analysers/destination
+    // Note: Node connections will be re-managed dynamically in play() based on type.
   }
 
-  private createWhiteNoiseBuffer(): AudioBuffer {
+  private disconnectAll() {
+    if (this.noiseNode) this.noiseNode.disconnect();
+    if (this.greenBandpass) this.greenBandpass.disconnect();
+    if (this.highpassFilter) this.highpassFilter.disconnect();
+    if (this.lowpassFilter) this.lowpassFilter.disconnect();
+    if (this.gainNode) this.gainNode.disconnect();
+  }
+
+  private createWhiteNoiseBuffer(durationSeconds = 2): AudioBuffer {
     if (!this.ctx) throw new Error("AudioContext not initialized");
-    const bufferSize = this.ctx.sampleRate * 2; // 2 seconds of noise
+    const bufferSize = this.ctx.sampleRate * durationSeconds;
     const buffer = this.ctx.createBuffer(2, bufferSize, this.ctx.sampleRate);
 
     for (let channel = 0; channel < buffer.numberOfChannels; channel++) {
@@ -80,9 +87,9 @@ export class AudioGenerator {
     return buffer;
   }
 
-  private createPinkNoiseBuffer(): AudioBuffer {
+  private createPinkNoiseBuffer(durationSeconds = 2): AudioBuffer {
     if (!this.ctx) throw new Error("AudioContext not initialized");
-    const bufferSize = this.ctx.sampleRate * 2;
+    const bufferSize = this.ctx.sampleRate * durationSeconds;
     const buffer = this.ctx.createBuffer(2, bufferSize, this.ctx.sampleRate);
 
     for (let channel = 0; channel < buffer.numberOfChannels; channel++) {
@@ -104,9 +111,9 @@ export class AudioGenerator {
     return buffer;
   }
 
-  private createBrownNoiseBuffer(): AudioBuffer {
+  private createBrownNoiseBuffer(durationSeconds = 2): AudioBuffer {
     if (!this.ctx) throw new Error("AudioContext not initialized");
-    const bufferSize = this.ctx.sampleRate * 2;
+    const bufferSize = this.ctx.sampleRate * durationSeconds;
     const buffer = this.ctx.createBuffer(2, bufferSize, this.ctx.sampleRate);
 
     for (let channel = 0; channel < buffer.numberOfChannels; channel++) {
@@ -122,19 +129,138 @@ export class AudioGenerator {
     return buffer;
   }
 
+  private createRainNoiseBuffer(): AudioBuffer {
+    if (!this.ctx) throw new Error("AudioContext not initialized");
+    const durationSeconds = 10;
+    const bufferSize = this.ctx.sampleRate * durationSeconds;
+    const buffer = this.ctx.createBuffer(2, bufferSize, this.ctx.sampleRate);
+
+    for (let channel = 0; channel < buffer.numberOfChannels; channel++) {
+      const output = buffer.getChannelData(channel);
+      let lastOut = 0;
+      for (let i = 0; i < bufferSize; i++) {
+        // Base brown noise
+        const white = Math.random() * 2 - 1;
+        let brown = (lastOut + (0.02 * white)) / 1.02;
+        lastOut = brown;
+
+        // Random high frequency drops
+        if (Math.random() > 0.9995) {
+           brown += (Math.random() * 2 - 1) * 0.8;
+        } else if (Math.random() > 0.99) {
+           brown += (Math.random() * 2 - 1) * 0.2;
+        }
+
+        output[i] = brown * 3.5;
+      }
+    }
+    return buffer;
+  }
+
+  private createTapeNoiseBuffer(): AudioBuffer {
+    if (!this.ctx) throw new Error("AudioContext not initialized");
+    const durationSeconds = 10;
+    const bufferSize = this.ctx.sampleRate * durationSeconds;
+    const buffer = this.ctx.createBuffer(2, bufferSize, this.ctx.sampleRate);
+
+    for (let channel = 0; channel < buffer.numberOfChannels; channel++) {
+      const output = buffer.getChannelData(channel);
+      let b0=0, b1=0, b2=0, b3=0, b4=0, b5=0, b6=0;
+      let time = 0;
+      for (let i = 0; i < bufferSize; i++) {
+        const white = Math.random() * 2 - 1;
+        // Base pink noise
+        b0 = 0.99886 * b0 + white * 0.0555179;
+        b1 = 0.99332 * b1 + white * 0.0750759;
+        b2 = 0.96900 * b2 + white * 0.1538520;
+        b3 = 0.86650 * b3 + white * 0.3104856;
+        b4 = 0.55000 * b4 + white * 0.5329522;
+        b5 = -0.7616 * b5 - white * 0.0168980;
+        let pink = b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362;
+        b6 = white * 0.115926;
+
+        // Add 60Hz hum
+        const hum = Math.sin(2 * Math.PI * 60 * time) * 0.05;
+        // Add subtle hiss
+        const hiss = (Math.random() * 2 - 1) * 0.05;
+
+        output[i] = (pink * 0.11) + hum + hiss;
+        time += 1 / this.ctx.sampleRate;
+      }
+    }
+    return buffer;
+  }
+
+  private createRadioNoiseBuffer(): AudioBuffer {
+    if (!this.ctx) throw new Error("AudioContext not initialized");
+    const durationSeconds = 10;
+    const bufferSize = this.ctx.sampleRate * durationSeconds;
+    const buffer = this.ctx.createBuffer(2, bufferSize, this.ctx.sampleRate);
+
+    for (let channel = 0; channel < buffer.numberOfChannels; channel++) {
+      const output = buffer.getChannelData(channel);
+      let time = 0;
+      for (let i = 0; i < bufferSize; i++) {
+        let white = Math.random() * 2 - 1;
+
+        // Occasional static crackles
+        if (Math.random() > 0.995) {
+           white *= 2.0;
+        }
+
+        // Simulate bandpass sweep by using a simple AM modulation approach for phasey sound
+        const lfo = Math.sin(2 * Math.PI * 0.5 * time);
+
+        output[i] = white * (0.8 + 0.2 * lfo);
+        time += 1 / this.ctx.sampleRate;
+      }
+    }
+    return buffer;
+  }
+
+  private createCafeNoiseBuffer(): AudioBuffer {
+    if (!this.ctx) throw new Error("AudioContext not initialized");
+    const durationSeconds = 10;
+    const bufferSize = this.ctx.sampleRate * durationSeconds;
+    const buffer = this.ctx.createBuffer(2, bufferSize, this.ctx.sampleRate);
+
+    for (let channel = 0; channel < buffer.numberOfChannels; channel++) {
+      const output = buffer.getChannelData(channel);
+      let lastOut = 0;
+      for (let i = 0; i < bufferSize; i++) {
+        // Brown noise as base (muffled room sound)
+        const white = Math.random() * 2 - 1;
+        let brown = (lastOut + (0.02 * white)) / 1.02;
+        lastOut = brown;
+
+        // Mid-frequency bursts simulating voices/clatter
+        let chatter = 0;
+        if (Math.random() > 0.99) {
+           chatter = (Math.random() * 2 - 1) * 0.3;
+        }
+
+        output[i] = (brown * 3.5) + chatter;
+      }
+    }
+    return buffer;
+  }
+
   public play() {
     this.init();
-    if (!this.ctx) return;
+    if (!this.ctx || !this.highpassFilter || !this.lowpassFilter || !this.gainNode || !this.splitter || !this.analyserLeft || !this.analyserRight) return;
     if (this.ctx.state === 'suspended') {
       this.ctx.resume();
     }
     if (this.isPlaying) return;
+
+    this.disconnectAll();
 
     this.noiseNode = this.ctx.createBufferSource();
 
     let buffer: AudioBuffer;
     switch (this.currentNoiseType) {
       case 'white':
+      case 'green':
         buffer = this.createWhiteNoiseBuffer();
         break;
       case 'pink':
@@ -143,13 +269,44 @@ export class AudioGenerator {
       case 'brown':
         buffer = this.createBrownNoiseBuffer();
         break;
+      case 'rain':
+        buffer = this.createRainNoiseBuffer();
+        break;
+      case 'tape':
+        buffer = this.createTapeNoiseBuffer();
+        break;
+      case 'radio':
+        buffer = this.createRadioNoiseBuffer();
+        break;
+      case 'cafe':
+        buffer = this.createCafeNoiseBuffer();
+        break;
+      default:
+        buffer = this.createWhiteNoiseBuffer();
     }
 
     this.noiseNode.buffer = buffer;
     this.noiseNode.loop = true;
-    if (this.highpassFilter) {
-      this.noiseNode.connect(this.highpassFilter);
+
+    // Routing
+    let currentNode: AudioNode = this.noiseNode;
+
+    // Green noise uses White noise passed through a bandpass filter
+    if (this.currentNoiseType === 'green' && this.greenBandpass) {
+      currentNode.connect(this.greenBandpass);
+      currentNode = this.greenBandpass;
     }
+
+    // Pass through Highpass -> Lowpass -> Gain -> Splitter -> Analysers & Dest
+    currentNode.connect(this.highpassFilter);
+    this.highpassFilter.connect(this.lowpassFilter);
+    this.lowpassFilter.connect(this.gainNode);
+    this.gainNode.connect(this.splitter);
+
+    this.splitter.connect(this.analyserLeft, 0);
+    this.splitter.connect(this.analyserRight, 1);
+    this.gainNode.connect(this.ctx.destination);
+
     this.noiseNode.start(0);
     this.isPlaying = true;
   }
@@ -215,13 +372,11 @@ export class AudioGenerator {
     }
     const rmsRight = Math.sqrt(sumRight / this.bufferLength);
 
-    // Add jitter for a more analog "VU meter" feel. Since constant noise has stable RMS,
-    // we want a slight visual tremble based on immediate time-domain fluctuations or random noise.
+    // Add jitter for a more analog "VU meter" feel
     const jitterLeft = (Math.random() - 0.5) * 0.05 * this.currentVolume;
     const jitterRight = (Math.random() - 0.5) * 0.05 * this.currentVolume;
 
     return {
-      // Scale it up nicely for a visual meter (0 to 1)
       left: Math.max(0, Math.min(1, (rmsLeft * 5) + jitterLeft)),
       right: Math.max(0, Math.min(1, (rmsRight * 5) + jitterRight))
     };

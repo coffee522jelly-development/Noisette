@@ -10,7 +10,8 @@ test.describe('Noisen App UI', () => {
 
   test('Layout and typography load correctly', async ({ page }) => {
     await expect(page.getByText('Noisen', { exact: false })).toBeVisible();
-    await expect(page.getByText('Reference Noise Generator', { exact: false })).toBeVisible();
+    await expect(page.getByText('Reference Noise Generator', { exact: true })).toBeVisible();
+    // Power button is now labelled 'Play' but has 'POWER' text below it
     await expect(page.getByRole('button', { name: 'Play' })).toBeVisible();
   });
 
@@ -21,8 +22,8 @@ test.describe('Noisen App UI', () => {
 
     const initialState = await toggleBtn.innerText();
 
-    // We dispatch a click on the toggle element using evaluate
-    await toggleBtn.evaluate(b => (b as HTMLElement).click());
+    // We dispatch a click on the toggle element
+    await toggleBtn.click({ force: true });
 
     await page.waitForTimeout(1000); // Give time for reactivity to update class
 
@@ -34,7 +35,7 @@ test.describe('Noisen App UI', () => {
     // Check if we see "Retro"
     await expect(page.getByText('Retro').first()).toBeVisible();
 
-    // Switch to Digital mode by clicking the switch
+    // Switch to Digital mode by clicking the switch directly
     const modeSwitch = page.getByRole('switch');
     await modeSwitch.evaluate(b => (b as HTMLElement).click());
 
@@ -42,16 +43,16 @@ test.describe('Noisen App UI', () => {
     await page.waitForTimeout(1000);
 
     // Check if "Digital" text now has the accent color
-    const modeSwitchLabel = page.getByText('Digital', { exact: false });
+    const modeSwitchLabel = page.getByText('Digital', { exact: true });
     const digitalTextClass = await modeSwitchLabel.getAttribute('class') || '';
     expect(digitalTextClass).toMatch(/text-accent/);
   });
 
   test('Noise type changes successfully', async ({ page }) => {
-    // Select Pink noise
-    const pinkRadio = page.getByText('Pink', { exact: false });
-    await pinkRadio.evaluate(b => (b as HTMLElement).click());
+    // Select Rain noise
+    const rainRadio = page.getByText('Rain', { exact: true });
+    await rainRadio.click({ force: true });
     await page.waitForTimeout(1000);
-    await expect(page.locator('input[value="pink"]')).toBeChecked();
+    await expect(page.locator('input[value="rain"]')).toBeChecked();
   });
 });
