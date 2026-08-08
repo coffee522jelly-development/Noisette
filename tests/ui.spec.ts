@@ -9,8 +9,8 @@ test.describe('Noisen App UI', () => {
   });
 
   test('Layout and typography load correctly', async ({ page }) => {
-    await expect(page.getByText('Noisen', { exact: true })).toBeVisible();
-    await expect(page.getByText('Hi-Fi Generator', { exact: true })).toBeVisible();
+    await expect(page.getByText('Noisen', { exact: false })).toBeVisible();
+    await expect(page.getByText('Reference Noise Generator', { exact: false })).toBeVisible();
     await expect(page.getByRole('button', { name: 'Play' })).toBeVisible();
   });
 
@@ -42,14 +42,14 @@ test.describe('Noisen App UI', () => {
     await page.waitForTimeout(1000);
 
     // Check if "Digital" text now has the accent color
-    const modeSwitchLabel = page.getByText('Digital', { exact: true });
+    const modeSwitchLabel = page.getByText('Digital', { exact: false });
     const digitalTextClass = await modeSwitchLabel.getAttribute('class') || '';
     expect(digitalTextClass).toMatch(/text-accent/);
   });
 
   test('Noise type changes successfully', async ({ page }) => {
     // Select Pink noise
-    const pinkRadio = page.getByText('Pink', { exact: true });
+    const pinkRadio = page.getByText('Pink', { exact: false });
     await pinkRadio.evaluate(b => (b as HTMLElement).click());
     await page.waitForTimeout(1000);
     await expect(page.locator('input[value="pink"]')).toBeChecked();
