@@ -1,15 +1,11 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   let { level = 0, mode = 'retro' } = $props<{ level?: number; mode?: 'retro' | 'digital' }>();
 
   // Use a damped level to simulate needle inertia
   let displayLevel = $state(0);
 
-  $effect(() => {
-    // Basic smoothing
-    const diff = level - displayLevel;
-    displayLevel += diff * 0.2;
-
-    // Animate via requestAnimationFrame for smooth movement
+  onMount(() => {
     let animationFrame: number;
     const update = () => {
        const currentDiff = level - displayLevel;

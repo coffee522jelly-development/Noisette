@@ -10,7 +10,7 @@ test.describe('Noisen App UI', () => {
 
   test('Layout and typography load correctly', async ({ page }) => {
     await expect(page.getByText('Noisen', { exact: true })).toBeVisible();
-    await expect(page.getByText('High-Fidelity Noise Generator', { exact: true })).toBeVisible();
+    await expect(page.getByText('Hi-Fi Generator', { exact: true })).toBeVisible();
     await expect(page.getByRole('button', { name: 'Play' })).toBeVisible();
   });
 
@@ -21,8 +21,8 @@ test.describe('Noisen App UI', () => {
 
     const initialState = await toggleBtn.innerText();
 
-    // We dispatch a click on the toggle element
-    await toggleBtn.click({ force: true });
+    // We dispatch a click on the toggle element using evaluate
+    await toggleBtn.evaluate(b => (b as HTMLElement).click());
 
     await page.waitForTimeout(1000); // Give time for reactivity to update class
 
@@ -34,12 +34,14 @@ test.describe('Noisen App UI', () => {
     // Check if we see "Retro"
     await expect(page.getByText('Retro').first()).toBeVisible();
 
-    // Use click and check text color to verify toggle since shadcn switch uses onCheckedChange
+    // Switch to Digital mode by clicking the switch
     const modeSwitch = page.getByRole('switch');
     await modeSwitch.evaluate(b => (b as HTMLElement).click());
 
-    // Wait for visual change on "Digital" text
+    // Wait for visual change
     await page.waitForTimeout(1000);
+
+    // Check if "Digital" text now has the accent color
     const modeSwitchLabel = page.getByText('Digital', { exact: true });
     const digitalTextClass = await modeSwitchLabel.getAttribute('class') || '';
     expect(digitalTextClass).toMatch(/text-accent/);
@@ -48,7 +50,7 @@ test.describe('Noisen App UI', () => {
   test('Noise type changes successfully', async ({ page }) => {
     // Select Pink noise
     const pinkRadio = page.getByText('Pink', { exact: true });
-    await pinkRadio.click({ force: true });
+    await pinkRadio.evaluate(b => (b as HTMLElement).click());
     await page.waitForTimeout(1000);
     await expect(page.locator('input[value="pink"]')).toBeChecked();
   });

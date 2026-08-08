@@ -4,13 +4,20 @@ export class AudioGenerator {
   private ctx: AudioContext | null = null;
   private noiseNode: AudioBufferSourceNode | null = null;
   private gainNode: GainNode | null = null;
+
+  private lowpassFilter: BiquadFilterNode | null = null;
+  private highpassFilter: BiquadFilterNode | null = null;
+
   private analyserLeft: AnalyserNode | null = null;
   private analyserRight: AnalyserNode | null = null;
   private splitter: ChannelSplitterNode | null = null;
 
   private isPlaying = false;
   private currentVolume = 0.5;
+  private currentLowpass = 20000;
+  private currentHighpass = 20;
   private currentNoiseType: NoiseType = 'white';
+
   private bufferLength = 0;
   private dataArrayLeft: Uint8Array | null = null;
   private dataArrayRight: Uint8Array | null = null;
@@ -22,6 +29,16 @@ export class AudioGenerator {
   private init() {
     if (this.ctx) return;
     this.ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+
+    // Create filters
+    this.lowpassFilter = this.ctx.createBiquadFilter();
+    this.lowpassFilter.type = 'lowpass';
+    this.lowpassFilter.frequency.value = this.currentLowpass;
+
+    this.highpassFilter = this.ctx.createBiquadFilter();
+    this.highpassFilter.type = 'highpass';
+    this.highpassFilter.frequency.value = this.currentHighpass;
+
     this.gainNode = this.ctx.createGain();
     this.gainNode.gain.value = this.currentVolume;
 
@@ -37,11 +54,15 @@ export class AudioGenerator {
     this.dataArrayLeft = new Uint8Array(this.bufferLength);
     this.dataArrayRight = new Uint8Array(this.bufferLength);
 
+    // Audio routing: highpass -> lowpass -> gain -> splitter -> analysers/destination
+    this.highpassFilter.connect(this.lowpassFilter);
+    this.lowpassFilter.connect(this.gainNode);
     this.gainNode.connect(this.splitter);
+
     this.splitter.connect(this.analyserLeft, 0);
     // If mono, connect channel 0 to right analyser as well to show activity
     this.splitter.connect(this.analyserRight, 1);
-    // Connect both channels to destination
+
     this.gainNode.connect(this.ctx.destination);
   }
 
@@ -126,8 +147,8 @@ export class AudioGenerator {
 
     this.noiseNode.buffer = buffer;
     this.noiseNode.loop = true;
-    if (this.gainNode) {
-      this.noiseNode.connect(this.gainNode);
+    if (this.highpassFilter) {
+      this.noiseNode.connect(this.highpassFilter);
     }
     this.noiseNode.start(0);
     this.isPlaying = true;
@@ -147,6 +168,20 @@ export class AudioGenerator {
     this.currentVolume = Math.max(0, Math.min(1, volume));
     if (this.gainNode && this.ctx) {
       this.gainNode.gain.setValueAtTime(this.currentVolume, this.ctx.currentTime);
+    }
+  }
+
+  public setLowpass(frequency: number) {
+    this.currentLowpass = Math.max(20, Math.min(20000, frequency));
+    if (this.lowpassFilter && this.ctx) {
+      this.lowpassFilter.frequency.setValueAtTime(this.currentLowpass, this.ctx.currentTime);
+    }
+  }
+
+  public setHighpass(frequency: number) {
+    this.currentHighpass = Math.max(20, Math.min(20000, frequency));
+    if (this.highpassFilter && this.ctx) {
+      this.highpassFilter.frequency.setValueAtTime(this.currentHighpass, this.ctx.currentTime);
     }
   }
 
@@ -180,10 +215,15 @@ export class AudioGenerator {
     }
     const rmsRight = Math.sqrt(sumRight / this.bufferLength);
 
+    // Add jitter for a more analog "VU meter" feel. Since constant noise has stable RMS,
+    // we want a slight visual tremble based on immediate time-domain fluctuations or random noise.
+    const jitterLeft = (Math.random() - 0.5) * 0.05 * this.currentVolume;
+    const jitterRight = (Math.random() - 0.5) * 0.05 * this.currentVolume;
+
     return {
       // Scale it up nicely for a visual meter (0 to 1)
-      left: Math.min(1, rmsLeft * 5),
-      right: Math.min(1, rmsRight * 5)
+      left: Math.max(0, Math.min(1, (rmsLeft * 5) + jitterLeft)),
+      right: Math.max(0, Math.min(1, (rmsRight * 5) + jitterRight))
     };
   }
 
