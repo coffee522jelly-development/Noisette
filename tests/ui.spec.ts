@@ -15,31 +15,34 @@ test.describe('Noisen App UI', () => {
   });
 
   test('Theme toggling works correctly', async ({ page }) => {
-    // Check initial state
-    const toggleBtn = page.getByRole('button', { name: /Mode/i });
+    const html = page.locator('html');
+    const toggleBtn = page.getByRole('button', { name: /Toggle Theme Mode/i });
+
     await expect(toggleBtn).toBeVisible();
 
-    const initialState = await toggleBtn.innerText();
+    const isCurrentlyDark = await html.evaluate(el => el.classList.contains('dark'));
 
-    // We dispatch a click on the toggle element
-    await toggleBtn.click({ force: true });
+    // We dispatch a click on the toggle element using evaluate
+    await toggleBtn.evaluate(b => (b as HTMLElement).click());
 
     await page.waitForTimeout(1000); // Give time for reactivity to update class
 
-    const newState = await toggleBtn.innerText();
-    expect(initialState).not.toBe(newState);
+    const isNowDark = await html.evaluate(el => el.classList.contains('dark'));
+    expect(isCurrentlyDark).not.toBe(isNowDark);
   });
 
   test('Visual modes for VU Meter toggle correctly', async ({ page }) => {
     // Check if we see "Retro"
     await expect(page.getByText('Retro').first()).toBeVisible();
 
-    // Use click and check text color to verify toggle since shadcn switch uses onCheckedChange
+    // Switch to Digital mode by clicking the switch directly
     const modeSwitch = page.getByRole('switch');
     await modeSwitch.evaluate(b => (b as HTMLElement).click());
 
-    // Wait for visual change on "Digital" text
+    // Wait for visual change
     await page.waitForTimeout(1000);
+
+    // Check if "Digital" text now has the accent color
     const modeSwitchLabel = page.getByText('Digital', { exact: true });
     const digitalTextClass = await modeSwitchLabel.getAttribute('class') || '';
     expect(digitalTextClass).toMatch(/text-accent/);
@@ -48,7 +51,7 @@ test.describe('Noisen App UI', () => {
   test('Base noise type changes successfully', async ({ page }) => {
     // Select Pink noise
     const pinkRadio = page.getByText('Pink', { exact: true });
-    await pinkRadio.click({ force: true });
+    await pinkRadio.evaluate(b => (b as HTMLElement).click());
     await page.waitForTimeout(1000);
     await expect(page.locator('input[name="baseNoise"][value="pink"]')).toBeChecked();
   });
@@ -58,8 +61,8 @@ test.describe('Noisen App UI', () => {
     const rainBtn = page.locator('button').filter({ hasText: 'Rain' });
     const tapeBtn = page.locator('button').filter({ hasText: 'Tape' });
 
-    await rainBtn.click({ force: true });
-    await tapeBtn.click({ force: true });
+    await rainBtn.evaluate(b => (b as HTMLElement).click());
+    await tapeBtn.evaluate(b => (b as HTMLElement).click());
 
     await page.waitForTimeout(500);
 
