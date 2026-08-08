@@ -122,7 +122,7 @@
 </script>
 
 <!-- Chassis / Rack-mount Container -->
-<div class="flex flex-col xl:flex-row items-stretch justify-start w-full max-w-md xl:max-w-6xl xl:h-auto mx-auto p-4 bg-brushed border-x-[16px] xl:border-y-[16px] xl:border-x-[24px] border-[var(--surface)] shadow-[0_0_20px_rgba(0,0,0,0.8)] relative overflow-hidden gap-6 xl:gap-8 rounded-sm">
+<div class="flex flex-col xl:flex-row items-stretch justify-start w-full max-w-md xl:max-w-none xl:w-full xl:h-auto mx-auto p-4 bg-brushed border-x-[16px] xl:border-y-[16px] xl:border-x-[24px] border-[var(--surface)] shadow-[0_0_20px_rgba(0,0,0,0.8)] relative overflow-hidden gap-6 xl:gap-8 rounded-sm">
 
   <!-- Rack mounting screw holes (Vertical mode) -->
   <div class="xl:hidden absolute top-4 left-1 w-3 h-3 rounded-full bg-screw border border-black/50 shadow-[inset_0_1px_2px_rgba(0,0,0,0.5),0_1px_0_rgba(255,255,255,0.2)] flex items-center justify-center"><div class="w-full h-px bg-black/40 rotate-45"></div></div>
@@ -162,7 +162,7 @@
   <div class="flex flex-col xl:flex-row flex-1 gap-6 xl:gap-8 justify-center items-center xl:items-stretch">
 
     <!-- VU Meters Display Panel -->
-    <div class="w-full xl:w-auto bg-panel p-4 rounded border border-border shadow-recessed relative shrink-0">
+    <div class="w-full xl:flex-1 bg-panel p-4 rounded border border-border shadow-recessed relative shrink-0">
       <!-- Mode Toggle Switch inside the display area -->
       <div class="absolute top-3 right-4 flex items-center gap-1 z-20">
         <span class="text-[8px] uppercase font-mono {viewMode === 'retro' ? 'text-primary drop-shadow-[0_0_2px_var(--primary)]' : 'text-secondary opacity-50'}">Retro</span>
@@ -187,7 +187,7 @@
     </div>
 
     <!-- Oscillator & Ambient Panel -->
-    <div class="w-full xl:w-auto flex flex-col xl:flex-col gap-4">
+    <div class="w-full xl:flex-1 flex flex-col xl:flex-col gap-4">
       <!-- Oscillator Source (Radio behavior) -->
       <div class="flex-1">
         <h3 class="text-[10px] font-mono text-engraved uppercase tracking-[0.2em] border-b border-border/30 pb-1 mb-2 ml-2">Base Noise</h3>
@@ -229,8 +229,8 @@
     </div>
 
     <!-- Filters & Output Panel -->
-    <div class="w-full xl:w-auto flex flex-col xl:flex-row gap-4">
-      <div class="flex-1 xl:flex-none xl:w-40 flex flex-col">
+    <div class="w-full xl:flex-[1.5] flex flex-col xl:flex-row gap-4">
+      <div class="flex-1 flex flex-col">
         <h3 class="text-[10px] font-mono text-engraved uppercase tracking-[0.2em] border-b border-border/30 pb-1 mb-2 ml-2">Filters</h3>
         <div class="flex xl:flex-col justify-around xl:justify-center xl:gap-4 items-center bg-panel/30 p-3 rounded-md border border-border/20 shadow-inner flex-1 xl:py-6">
           <Knob bind:value={highpass} min={20} max={5000} step={10} size={45} label="HPF" />
@@ -238,7 +238,7 @@
         </div>
       </div>
 
-      <div class="flex-[1.5] xl:flex-none xl:w-48 flex flex-col">
+      <div class="flex-[1.5] flex flex-col">
         <h3 class="text-[10px] font-mono text-engraved uppercase tracking-[0.2em] border-b border-border/30 pb-1 mb-2 ml-2">Output</h3>
         <div class="flex justify-center items-center bg-panel/30 p-3 rounded-md border border-border/20 shadow-inner flex-1 xl:relative">
           <Knob bind:value={volume} min={0} max={100} step={1} size={65} label="Level" />
