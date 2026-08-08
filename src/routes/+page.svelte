@@ -147,14 +147,30 @@
   <div class="hidden xl:flex absolute bottom-1 right-12 w-3 h-3 rounded-full bg-screw border border-black/50 shadow-[inset_0_1px_2px_rgba(0,0,0,0.5),0_1px_0_rgba(255,255,255,0.2)] items-center justify-center"><div class="w-full h-px bg-black/40 -rotate-12"></div></div>
 
   <!-- Header / Branding -->
-  <div class="xl:flex xl:flex-col xl:justify-center xl:border-b-0 xl:border-r xl:pr-6 text-center w-full xl:w-auto flex justify-between items-center mb-6 xl:mb-0 px-4 xl:px-0 border-b border-border/50 pb-2 xl:pb-0 shrink-0">
-    <div class="xl:mb-4">
-      <h1 class="text-2xl xl:text-4xl font-black tracking-[0.3em] xl:tracking-[0.2em] text-primary drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)] m-0 leading-none" style="text-shadow: 0px 1px 0px rgba(255,255,255,0.2), 0px -1px 0px rgba(0,0,0,0.8);">NOISEN</h1>
-      <p class="text-[8px] xl:text-[9px] uppercase tracking-[0.4em] text-secondary mt-1 xl:mt-2 font-mono">Reference Noise Generator</p>
+  <div class="xl:flex xl:flex-row xl:justify-between xl:border-b-0 xl:border-r xl:pr-6 text-center w-full xl:w-auto flex justify-between items-center mb-6 xl:mb-0 px-4 xl:px-0 border-b border-border/50 pb-2 xl:pb-0 shrink-0 h-full py-2 xl:gap-8">
+    <div class="flex flex-col justify-between h-full">
+      <div class="xl:mb-4 xl:mt-auto order-1 xl:order-none text-left xl:text-left mr-auto xl:mr-0">
+        <h1 class="text-2xl xl:text-4xl font-black tracking-[0.3em] xl:tracking-[0.2em] text-primary drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)] m-0 leading-none" style="text-shadow: 0px 1px 0px rgba(255,255,255,0.2), 0px -1px 0px rgba(0,0,0,0.8);">NOISEN</h1>
+        <p class="text-[8px] xl:text-[9px] uppercase tracking-[0.4em] text-secondary mt-1 xl:mt-2 font-mono">Reference Noise Generator</p>
+      </div>
+
+      <div class="hidden xl:block text-left mt-auto">
+        <p class="text-[10px] font-mono text-secondary">MODEL N-01</p>
+        <p class="text-[8px] font-mono text-secondary opacity-60">AC 100V 50/60Hz</p>
+      </div>
     </div>
-    <div class="text-right xl:text-center mt-0 xl:mt-auto">
-      <p class="text-[10px] font-mono text-secondary">MODEL N-01</p>
-      <p class="text-[8px] font-mono text-secondary opacity-60">AC 100V 50/60Hz</p>
+
+    <!-- Main Power Button (Moved to Logo Header) -->
+    <div class="flex flex-col items-center shrink-0 order-2 xl:order-none xl:self-center xl:mr-2">
+      <button
+        class="w-10 h-10 xl:w-12 xl:h-12 rounded-full border border-black/40 {isPlaying ? 'bg-primary/20' : 'bg-gradient-to-b from-[#f0f0f0] to-[#b0b0b0]'} shadow-[0_6px_8px_rgba(0,0,0,0.6),inset_0_1px_1px_rgba(255,255,255,0.4)] flex items-center justify-center transition-all active:scale-95 active:shadow-[0_1px_2px_rgba(0,0,0,0.5)] z-20 relative"
+        onclick={togglePlay}
+        aria-label="Play"
+      >
+        <Power class="w-5 h-5 xl:w-6 xl:h-6 {isPlaying ? 'text-primary drop-shadow-[0_0_4px_var(--primary)]' : 'text-black/60'}" />
+        <div class="absolute -top-3 w-1.5 h-1.5 rounded-full {isPlaying ? 'bg-accent shadow-[0_0_5px_var(--accent)]' : 'bg-black/50 shadow-inner'} z-10 left-1/2 -translate-x-1/2"></div>
+      </button>
+      <span class="mt-2 text-[8px] xl:text-[10px] font-mono text-engraved tracking-widest z-10">POWER</span>
     </div>
   </div>
 
@@ -240,21 +256,8 @@
 
       <div class="flex-[1.5] flex flex-col">
         <h3 class="text-[10px] font-mono text-engraved uppercase tracking-[0.2em] border-b border-border/30 pb-1 mb-2 ml-2">Output</h3>
-        <div class="flex justify-center items-center bg-panel/30 p-3 rounded-md border border-border/20 shadow-inner flex-1 xl:relative">
+        <div class="flex justify-center items-center bg-panel/30 p-3 rounded-md border border-border/20 shadow-inner flex-1">
           <Knob bind:value={volume} min={0} max={100} step={1} size={65} label="Level" />
-
-          <!-- Main Power Button (Moved to Bottom Right on small, Top Right on large) -->
-          <div class="absolute bottom-6 right-6 xl:bottom-auto xl:right-auto xl:top-4 xl:right-4 flex flex-col items-center xl:scale-90">
-            <button
-             class="w-12 h-12 rounded-full border border-black/40 {isPlaying ? 'bg-primary/20' : 'bg-gradient-to-b from-[#f0f0f0] to-[#b0b0b0]'} shadow-[0_6px_8px_rgba(0,0,0,0.6),inset_0_1px_1px_rgba(255,255,255,0.4)] flex items-center justify-center transition-all active:scale-95 active:shadow-[0_1px_2px_rgba(0,0,0,0.5)] z-20"
-             onclick={togglePlay}
-             aria-label="Play"
-            >
-              <Power class="w-6 h-6 {isPlaying ? 'text-primary drop-shadow-[0_0_4px_var(--primary)]' : 'text-black/60'}" />
-            </button>
-            <div class="absolute -top-3 w-1.5 h-1.5 rounded-full {isPlaying ? 'bg-accent shadow-[0_0_5px_var(--accent)]' : 'bg-black/50 shadow-inner'} z-10"></div>
-            <span class="mt-2 text-[10px] font-mono text-engraved tracking-widest z-10">POWER</span>
-          </div>
         </div>
       </div>
     </div>
