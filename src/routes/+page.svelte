@@ -122,29 +122,29 @@
 </script>
 
 <!-- Chassis / Rack-mount Container -->
-<div class="flex flex-col xl:flex-row items-stretch justify-start w-full max-w-md xl:max-w-none xl:w-full xl:h-auto mx-auto p-4 bg-brushed border-x-[16px] xl:border-y-[16px] xl:border-x-[24px] border-[var(--surface)] shadow-[0_0_20px_rgba(0,0,0,0.8)] relative overflow-hidden gap-6 xl:gap-8 rounded-sm">
+<div class="flex flex-col xl:flex-row items-stretch justify-start w-full max-w-md xl:max-w-none xl:w-full xl:h-auto mx-auto p-2 xl:p-4 bg-brushed border-x-[8px] xl:border-y-[8px] xl:border-x-[12px] border-[var(--surface)] shadow-[0_0_20px_rgba(0,0,0,0.8)] relative overflow-hidden gap-4 xl:gap-4 rounded-sm">
 
   <!-- Rack mounting screw holes (Vertical mode) -->
-  <div class="xl:hidden absolute top-4 left-1 w-3 h-3 rounded-full bg-screw border border-black/50 shadow-[inset_0_1px_2px_rgba(0,0,0,0.5),0_1px_0_rgba(255,255,255,0.2)] flex items-center justify-center"><div class="w-full h-px bg-black/40 rotate-45"></div></div>
-  <div class="xl:hidden absolute top-12 left-1 w-3 h-3 rounded-full bg-screw border border-black/50 shadow-[inset_0_1px_2px_rgba(0,0,0,0.5),0_1px_0_rgba(255,255,255,0.2)] flex items-center justify-center"><div class="w-full h-px bg-black/40 -rotate-12"></div></div>
-  <div class="xl:hidden absolute top-4 right-1 w-3 h-3 rounded-full bg-screw border border-black/50 shadow-[inset_0_1px_2px_rgba(0,0,0,0.5),0_1px_0_rgba(255,255,255,0.2)] flex items-center justify-center"><div class="w-full h-px bg-black/40 rotate-90"></div></div>
-  <div class="xl:hidden absolute top-12 right-1 w-3 h-3 rounded-full bg-screw border border-black/50 shadow-[inset_0_1px_2px_rgba(0,0,0,0.5),0_1px_0_rgba(255,255,255,0.2)] flex items-center justify-center"><div class="w-full h-px bg-black/40 rotate-12"></div></div>
+  <div class="xl:hidden absolute top-4 left-[2px] w-3 h-3 rounded-full bg-screw border border-black/50 shadow-[inset_0_1px_2px_rgba(0,0,0,0.5),0_1px_0_rgba(255,255,255,0.2)] flex items-center justify-center scale-75"><div class="w-full h-px bg-black/40 rotate-45"></div></div>
+  <div class="xl:hidden absolute top-12 left-[2px] w-3 h-3 rounded-full bg-screw border border-black/50 shadow-[inset_0_1px_2px_rgba(0,0,0,0.5),0_1px_0_rgba(255,255,255,0.2)] flex items-center justify-center scale-75"><div class="w-full h-px bg-black/40 -rotate-12"></div></div>
+  <div class="xl:hidden absolute top-4 right-[2px] w-3 h-3 rounded-full bg-screw border border-black/50 shadow-[inset_0_1px_2px_rgba(0,0,0,0.5),0_1px_0_rgba(255,255,255,0.2)] flex items-center justify-center scale-75"><div class="w-full h-px bg-black/40 rotate-90"></div></div>
+  <div class="xl:hidden absolute top-12 right-[2px] w-3 h-3 rounded-full bg-screw border border-black/50 shadow-[inset_0_1px_2px_rgba(0,0,0,0.5),0_1px_0_rgba(255,255,255,0.2)] flex items-center justify-center scale-75"><div class="w-full h-px bg-black/40 rotate-12"></div></div>
 
-  <div class="xl:hidden absolute bottom-4 left-1 w-3 h-3 rounded-full bg-screw border border-black/50 shadow-[inset_0_1px_2px_rgba(0,0,0,0.5),0_1px_0_rgba(255,255,255,0.2)] flex items-center justify-center"><div class="w-full h-px bg-black/40 rotate-45"></div></div>
-  <div class="xl:hidden absolute bottom-12 left-1 w-3 h-3 rounded-full bg-screw border border-black/50 shadow-[inset_0_1px_2px_rgba(0,0,0,0.5),0_1px_0_rgba(255,255,255,0.2)] flex items-center justify-center"><div class="w-full h-px bg-black/40 -rotate-45"></div></div>
-  <div class="xl:hidden absolute bottom-4 right-1 w-3 h-3 rounded-full bg-screw border border-black/50 shadow-[inset_0_1px_2px_rgba(0,0,0,0.5),0_1px_0_rgba(255,255,255,0.2)] flex items-center justify-center"><div class="w-full h-px bg-black/40 rotate-180"></div></div>
-  <div class="xl:hidden absolute bottom-12 right-1 w-3 h-3 rounded-full bg-screw border border-black/50 shadow-[inset_0_1px_2px_rgba(0,0,0,0.5),0_1px_0_rgba(255,255,255,0.2)] flex items-center justify-center"><div class="w-full h-px bg-black/40 -rotate-12"></div></div>
+  <div class="xl:hidden absolute bottom-4 left-[2px] w-3 h-3 rounded-full bg-screw border border-black/50 shadow-[inset_0_1px_2px_rgba(0,0,0,0.5),0_1px_0_rgba(255,255,255,0.2)] flex items-center justify-center scale-75"><div class="w-full h-px bg-black/40 rotate-45"></div></div>
+  <div class="xl:hidden absolute bottom-12 left-[2px] w-3 h-3 rounded-full bg-screw border border-black/50 shadow-[inset_0_1px_2px_rgba(0,0,0,0.5),0_1px_0_rgba(255,255,255,0.2)] flex items-center justify-center scale-75"><div class="w-full h-px bg-black/40 -rotate-45"></div></div>
+  <div class="xl:hidden absolute bottom-4 right-[2px] w-3 h-3 rounded-full bg-screw border border-black/50 shadow-[inset_0_1px_2px_rgba(0,0,0,0.5),0_1px_0_rgba(255,255,255,0.2)] flex items-center justify-center scale-75"><div class="w-full h-px bg-black/40 rotate-180"></div></div>
+  <div class="xl:hidden absolute bottom-12 right-[2px] w-3 h-3 rounded-full bg-screw border border-black/50 shadow-[inset_0_1px_2px_rgba(0,0,0,0.5),0_1px_0_rgba(255,255,255,0.2)] flex items-center justify-center scale-75"><div class="w-full h-px bg-black/40 -rotate-12"></div></div>
 
   <!-- Rack mounting screw holes (Horizontal mode) -->
-  <div class="hidden xl:flex absolute top-1 left-4 w-3 h-3 rounded-full bg-screw border border-black/50 shadow-[inset_0_1px_2px_rgba(0,0,0,0.5),0_1px_0_rgba(255,255,255,0.2)] items-center justify-center"><div class="w-full h-px bg-black/40 rotate-45"></div></div>
-  <div class="hidden xl:flex absolute top-1 left-12 w-3 h-3 rounded-full bg-screw border border-black/50 shadow-[inset_0_1px_2px_rgba(0,0,0,0.5),0_1px_0_rgba(255,255,255,0.2)] items-center justify-center"><div class="w-full h-px bg-black/40 -rotate-12"></div></div>
-  <div class="hidden xl:flex absolute bottom-1 left-4 w-3 h-3 rounded-full bg-screw border border-black/50 shadow-[inset_0_1px_2px_rgba(0,0,0,0.5),0_1px_0_rgba(255,255,255,0.2)] items-center justify-center"><div class="w-full h-px bg-black/40 rotate-90"></div></div>
-  <div class="hidden xl:flex absolute bottom-1 left-12 w-3 h-3 rounded-full bg-screw border border-black/50 shadow-[inset_0_1px_2px_rgba(0,0,0,0.5),0_1px_0_rgba(255,255,255,0.2)] items-center justify-center"><div class="w-full h-px bg-black/40 rotate-12"></div></div>
+  <div class="hidden xl:flex absolute top-[2px] left-4 w-3 h-3 rounded-full bg-screw border border-black/50 shadow-[inset_0_1px_2px_rgba(0,0,0,0.5),0_1px_0_rgba(255,255,255,0.2)] items-center justify-center scale-75"><div class="w-full h-px bg-black/40 rotate-45"></div></div>
+  <div class="hidden xl:flex absolute top-[2px] left-12 w-3 h-3 rounded-full bg-screw border border-black/50 shadow-[inset_0_1px_2px_rgba(0,0,0,0.5),0_1px_0_rgba(255,255,255,0.2)] items-center justify-center scale-75"><div class="w-full h-px bg-black/40 -rotate-12"></div></div>
+  <div class="hidden xl:flex absolute bottom-[2px] left-4 w-3 h-3 rounded-full bg-screw border border-black/50 shadow-[inset_0_1px_2px_rgba(0,0,0,0.5),0_1px_0_rgba(255,255,255,0.2)] items-center justify-center scale-75"><div class="w-full h-px bg-black/40 rotate-90"></div></div>
+  <div class="hidden xl:flex absolute bottom-[2px] left-12 w-3 h-3 rounded-full bg-screw border border-black/50 shadow-[inset_0_1px_2px_rgba(0,0,0,0.5),0_1px_0_rgba(255,255,255,0.2)] items-center justify-center scale-75"><div class="w-full h-px bg-black/40 rotate-12"></div></div>
 
-  <div class="hidden xl:flex absolute top-1 right-4 w-3 h-3 rounded-full bg-screw border border-black/50 shadow-[inset_0_1px_2px_rgba(0,0,0,0.5),0_1px_0_rgba(255,255,255,0.2)] items-center justify-center"><div class="w-full h-px bg-black/40 rotate-45"></div></div>
-  <div class="hidden xl:flex absolute top-1 right-12 w-3 h-3 rounded-full bg-screw border border-black/50 shadow-[inset_0_1px_2px_rgba(0,0,0,0.5),0_1px_0_rgba(255,255,255,0.2)] items-center justify-center"><div class="w-full h-px bg-black/40 -rotate-45"></div></div>
-  <div class="hidden xl:flex absolute bottom-1 right-4 w-3 h-3 rounded-full bg-screw border border-black/50 shadow-[inset_0_1px_2px_rgba(0,0,0,0.5),0_1px_0_rgba(255,255,255,0.2)] items-center justify-center"><div class="w-full h-px bg-black/40 rotate-180"></div></div>
-  <div class="hidden xl:flex absolute bottom-1 right-12 w-3 h-3 rounded-full bg-screw border border-black/50 shadow-[inset_0_1px_2px_rgba(0,0,0,0.5),0_1px_0_rgba(255,255,255,0.2)] items-center justify-center"><div class="w-full h-px bg-black/40 -rotate-12"></div></div>
+  <div class="hidden xl:flex absolute top-[2px] right-4 w-3 h-3 rounded-full bg-screw border border-black/50 shadow-[inset_0_1px_2px_rgba(0,0,0,0.5),0_1px_0_rgba(255,255,255,0.2)] items-center justify-center scale-75"><div class="w-full h-px bg-black/40 rotate-45"></div></div>
+  <div class="hidden xl:flex absolute top-[2px] right-12 w-3 h-3 rounded-full bg-screw border border-black/50 shadow-[inset_0_1px_2px_rgba(0,0,0,0.5),0_1px_0_rgba(255,255,255,0.2)] items-center justify-center scale-75"><div class="w-full h-px bg-black/40 -rotate-45"></div></div>
+  <div class="hidden xl:flex absolute bottom-[2px] right-4 w-3 h-3 rounded-full bg-screw border border-black/50 shadow-[inset_0_1px_2px_rgba(0,0,0,0.5),0_1px_0_rgba(255,255,255,0.2)] items-center justify-center scale-75"><div class="w-full h-px bg-black/40 rotate-180"></div></div>
+  <div class="hidden xl:flex absolute bottom-[2px] right-12 w-3 h-3 rounded-full bg-screw border border-black/50 shadow-[inset_0_1px_2px_rgba(0,0,0,0.5),0_1px_0_rgba(255,255,255,0.2)] items-center justify-center scale-75"><div class="w-full h-px bg-black/40 -rotate-12"></div></div>
 
   <!-- Header / Branding -->
   <div class="xl:flex xl:flex-row xl:justify-between xl:border-b-0 xl:border-r xl:pr-6 text-center w-full xl:w-auto flex justify-between items-center mb-6 xl:mb-0 px-4 xl:px-0 border-b border-border/50 pb-2 xl:pb-0 shrink-0 h-full py-2 xl:gap-8">
@@ -175,10 +175,10 @@
   </div>
 
   <!-- Panels Container for Horizontal layout -->
-  <div class="flex flex-col xl:flex-row flex-1 gap-6 xl:gap-8 justify-center items-center xl:items-stretch">
+  <div class="flex flex-col xl:flex-row flex-1 gap-4 xl:gap-4 justify-center items-center xl:items-stretch">
 
     <!-- VU Meters Display Panel -->
-    <div class="w-full xl:flex-1 bg-panel p-4 rounded border border-border shadow-recessed relative shrink-0">
+    <div class="w-full xl:flex-1 bg-panel p-4 rounded border border-border shadow-recessed relative">
       <!-- Mode Toggle Switch inside the display area -->
       <div class="absolute top-3 right-4 flex items-center gap-1 z-20">
         <span class="text-[8px] uppercase font-mono {viewMode === 'retro' ? 'text-primary drop-shadow-[0_0_2px_var(--primary)]' : 'text-secondary opacity-50'}">Retro</span>
