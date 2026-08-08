@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
-  import { AudioGenerator, type NoiseType } from '$lib/audio';
+  import { AudioGenerator, type BaseNoiseType, type AmbientNoiseType } from '$lib/audio';
   import VUMeter from '$lib/components/VUMeter.svelte';
   import Knob from '$lib/components/Knob.svelte';
   import { Switch } from '$lib/components/ui/switch';
@@ -13,17 +13,27 @@
   let lowpass = $state(20000);
   let highpass = $state(20);
 
-  let noiseType = $state<NoiseType>('white');
+  let baseNoise = $state<BaseNoiseType>('white');
+  let ambientState = $state<Record<AmbientNoiseType, boolean>>({
+    radio: false,
+    tape: false,
+    cafe: false,
+    rain: false
+  });
+
   let viewMode = $state<'retro' | 'digital'>('retro');
 
   let levels = $state({ left: 0, right: 0 });
   let animationFrame: number;
 
-  const NOISE_OPTIONS: { value: NoiseType, label: string }[] = [
+  const BASE_OPTIONS: { value: BaseNoiseType, label: string }[] = [
     { value: 'white', label: 'White' },
     { value: 'pink', label: 'Pink' },
     { value: 'brown', label: 'Brown' },
     { value: 'green', label: 'Green' },
+  ];
+
+  const AMBIENT_OPTIONS: { value: AmbientNoiseType, label: string }[] = [
     { value: 'radio', label: 'Radio' },
     { value: 'tape', label: 'Tape' },
     { value: 'cafe', label: 'Cafe' },
@@ -40,7 +50,6 @@
       if (audioGen && isPlaying) {
         levels = audioGen.getLevels();
       } else {
-        // Decay to zero when paused
         levels = {
            left: Math.max(0, levels.left - 0.05),
            right: Math.max(0, levels.right - 0.05)
@@ -74,6 +83,10 @@
      viewMode = checked ? 'digital' : 'retro';
   }
 
+  function toggleAmbient(type: AmbientNoiseType) {
+    ambientState[type] = !ambientState[type];
+  }
+
   $effect(() => {
     if (audioGen) {
       audioGen.setVolume(volume / 100);
@@ -94,15 +107,22 @@
 
   $effect(() => {
     if (audioGen) {
-      audioGen.setNoiseType(noiseType);
+      audioGen.setBaseNoiseType(baseNoise);
+    }
+  });
+
+  $effect(() => {
+    if (audioGen) {
+      // Sync ambient state to AudioGenerator
+      for (const [type, active] of Object.entries(ambientState)) {
+        audioGen.setAmbientNoise(type as AmbientNoiseType, active as boolean);
+      }
     }
   });
 </script>
 
-<!-- Chassis / Rack-mount Container -->
 <div class="flex flex-col items-center justify-start w-full max-w-md h-[100vh] mx-auto p-4 bg-brushed border-x-[16px] border-[var(--surface)] shadow-[0_0_20px_rgba(0,0,0,0.8)] relative overflow-hidden">
 
-  <!-- Rack mounting screw holes -->
   <div class="absolute top-4 left-1 w-3 h-3 rounded-full bg-screw border border-black/50 shadow-[inset_0_1px_2px_rgba(0,0,0,0.5),0_1px_0_rgba(255,255,255,0.2)] flex items-center justify-center"><div class="w-full h-px bg-black/40 rotate-45"></div></div>
   <div class="absolute top-12 left-1 w-3 h-3 rounded-full bg-screw border border-black/50 shadow-[inset_0_1px_2px_rgba(0,0,0,0.5),0_1px_0_rgba(255,255,255,0.2)] flex items-center justify-center"><div class="w-full h-px bg-black/40 -rotate-12"></div></div>
   <div class="absolute top-4 right-1 w-3 h-3 rounded-full bg-screw border border-black/50 shadow-[inset_0_1px_2px_rgba(0,0,0,0.5),0_1px_0_rgba(255,255,255,0.2)] flex items-center justify-center"><div class="w-full h-px bg-black/40 rotate-90"></div></div>
@@ -113,7 +133,6 @@
   <div class="absolute bottom-4 right-1 w-3 h-3 rounded-full bg-screw border border-black/50 shadow-[inset_0_1px_2px_rgba(0,0,0,0.5),0_1px_0_rgba(255,255,255,0.2)] flex items-center justify-center"><div class="w-full h-px bg-black/40 rotate-180"></div></div>
   <div class="absolute bottom-12 right-1 w-3 h-3 rounded-full bg-screw border border-black/50 shadow-[inset_0_1px_2px_rgba(0,0,0,0.5),0_1px_0_rgba(255,255,255,0.2)] flex items-center justify-center"><div class="w-full h-px bg-black/40 -rotate-12"></div></div>
 
-  <!-- Header / Branding -->
   <div class="text-center w-full flex justify-between items-center mb-6 px-4 border-b border-border/50 pb-2">
     <div>
       <h1 class="text-2xl font-black tracking-[0.3em] text-primary drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)] m-0 leading-none" style="text-shadow: 0px 1px 0px rgba(255,255,255,0.2), 0px -1px 0px rgba(0,0,0,0.8);">NOISEN</h1>
@@ -125,9 +144,7 @@
     </div>
   </div>
 
-  <!-- VU Meters Display Panel -->
-  <div class="w-full bg-panel p-4 rounded border border-border shadow-recessed relative mb-6">
-    <!-- Mode Toggle Switch inside the display area -->
+  <div class="w-full bg-panel p-4 rounded border border-border shadow-recessed relative mb-5">
     <div class="absolute top-3 right-4 flex items-center gap-1 z-20">
       <span class="text-[8px] uppercase font-mono {viewMode === 'retro' ? 'text-primary drop-shadow-[0_0_2px_var(--primary)]' : 'text-secondary opacity-50'}">Retro</span>
       <Switch
@@ -150,44 +167,62 @@
     </div>
   </div>
 
-  <!-- Oscillator Panel (Expanded Grid) -->
-  <div class="w-full mb-6 relative">
-    <h3 class="text-[10px] font-mono text-engraved uppercase tracking-[0.2em] border-b border-border/30 pb-1 mb-3 ml-2">Oscillator Source</h3>
-    <div class="grid grid-cols-4 grid-rows-2 gap-y-4 gap-x-2 w-full bg-panel/30 p-4 rounded-md border border-border/20 shadow-inner">
-      {#each NOISE_OPTIONS as option}
-        <label class="flex flex-col items-center gap-2 cursor-pointer group">
-          <input type="radio" name="noiseType" value={option.value} bind:group={noiseType} class="peer sr-only" />
-          <div class="w-5 h-5 rounded-full border border-black/40 peer-checked:border-primary/50 shadow-[0_2px_4px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.2)] transition-all flex items-center justify-center bg-gradient-to-b from-[#e0e0e0] to-[#999] relative peer-active:scale-95">
-             <div class="w-3.5 h-3.5 rounded-full bg-background shadow-inner"></div>
-             <!-- LED Indicator -->
-             <div class="absolute -top-3 w-1.5 h-1.5 rounded-full bg-black/50 shadow-inner peer-checked:bg-accent peer-checked:shadow-[0_0_5px_var(--accent)] transition-colors"></div>
-          </div>
-          <span class="font-mono text-[8px] tracking-widest text-secondary group-hover:text-primary transition-colors">{option.label}</span>
-        </label>
-      {/each}
+  <div class="w-full flex gap-4 mb-5">
+    <!-- Oscillator Source (Radio behavior) -->
+    <div class="flex-1">
+      <h3 class="text-[10px] font-mono text-engraved uppercase tracking-[0.2em] border-b border-border/30 pb-1 mb-2 ml-2">Base Noise</h3>
+      <div class="grid grid-cols-2 gap-y-3 gap-x-2 w-full bg-panel/30 p-3 rounded-md border border-border/20 shadow-inner">
+        {#each BASE_OPTIONS as option}
+          <label class="flex flex-col items-center gap-2 cursor-pointer group">
+            <input type="radio" name="baseNoise" value={option.value} bind:group={baseNoise} class="peer sr-only" />
+            <div class="w-5 h-5 rounded-full border border-black/40 peer-checked:border-primary/50 shadow-[0_2px_4px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.2)] transition-all flex items-center justify-center bg-gradient-to-b from-[#e0e0e0] to-[#999] relative peer-active:scale-95">
+               <div class="w-3 h-3 rounded-full bg-background shadow-inner"></div>
+               <div class="absolute -top-3 w-1 h-1 rounded-full bg-black/50 shadow-inner peer-checked:bg-accent peer-checked:shadow-[0_0_4px_var(--accent)] transition-colors"></div>
+            </div>
+            <span class="font-mono text-[8px] tracking-widest text-secondary group-hover:text-primary transition-colors">{option.label}</span>
+          </label>
+        {/each}
+      </div>
+    </div>
+
+    <!-- Ambient Effectors (Toggle behavior) -->
+    <div class="flex-1">
+      <h3 class="text-[10px] font-mono text-engraved uppercase tracking-[0.2em] border-b border-border/30 pb-1 mb-2 ml-2">Ambient Mix</h3>
+      <div class="grid grid-cols-2 gap-y-3 gap-x-2 w-full bg-panel/30 p-3 rounded-md border border-border/20 shadow-inner">
+        {#each AMBIENT_OPTIONS as option}
+          <button
+            type="button"
+            class="flex flex-col items-center gap-2 cursor-pointer group bg-transparent border-none p-0 outline-none"
+            onclick={() => toggleAmbient(option.value)}
+          >
+            <!-- Toggle visually behaves like push button -->
+            <div class="w-5 h-5 rounded-md border border-black/40 shadow-[0_2px_4px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.2)] transition-all flex items-center justify-center bg-gradient-to-b from-[#e0e0e0] to-[#999] relative active:scale-95 {ambientState[option.value] ? 'border-primary/50' : ''}">
+               <div class="w-3 h-3 rounded-sm bg-background shadow-inner"></div>
+               <div class="absolute -top-3 w-1 h-1 rounded-full bg-black/50 shadow-inner transition-colors {ambientState[option.value] ? 'bg-primary shadow-[0_0_4px_var(--primary)]' : ''}"></div>
+            </div>
+            <span class="font-mono text-[8px] tracking-widest text-secondary group-hover:text-primary transition-colors">{option.label}</span>
+          </button>
+        {/each}
+      </div>
     </div>
   </div>
 
   <!-- Filters & Output Panel -->
   <div class="w-full flex gap-4">
-
-    <!-- Filter Section -->
     <div class="flex-[3]">
-      <h3 class="text-[10px] font-mono text-engraved uppercase tracking-[0.2em] border-b border-border/30 pb-1 mb-3 ml-2">Filters</h3>
-      <div class="flex justify-around items-center bg-panel/30 p-4 rounded-md border border-border/20 shadow-inner h-[90px]">
-        <Knob bind:value={highpass} min={20} max={5000} step={10} size={50} label="HPF" />
-        <Knob bind:value={lowpass} min={500} max={20000} step={10} size={50} label="LPF" />
+      <h3 class="text-[10px] font-mono text-engraved uppercase tracking-[0.2em] border-b border-border/30 pb-1 mb-2 ml-2">Filters</h3>
+      <div class="flex justify-around items-center bg-panel/30 p-3 rounded-md border border-border/20 shadow-inner h-[80px]">
+        <Knob bind:value={highpass} min={20} max={5000} step={10} size={45} label="HPF" />
+        <Knob bind:value={lowpass} min={500} max={20000} step={10} size={45} label="LPF" />
       </div>
     </div>
 
-    <!-- Output Section -->
     <div class="flex-[2]">
-      <h3 class="text-[10px] font-mono text-engraved uppercase tracking-[0.2em] border-b border-border/30 pb-1 mb-3 ml-2">Output</h3>
-      <div class="flex justify-center items-center bg-panel/30 p-4 rounded-md border border-border/20 shadow-inner h-[90px]">
-        <Knob bind:value={volume} min={0} max={100} step={1} size={60} label="Level" />
+      <h3 class="text-[10px] font-mono text-engraved uppercase tracking-[0.2em] border-b border-border/30 pb-1 mb-2 ml-2">Output</h3>
+      <div class="flex justify-center items-center bg-panel/30 p-3 rounded-md border border-border/20 shadow-inner h-[80px]">
+        <Knob bind:value={volume} min={0} max={100} step={1} size={55} label="Level" />
       </div>
     </div>
-
   </div>
 
   <!-- Main Power Button (Moved to Bottom Right) -->
