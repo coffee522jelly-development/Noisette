@@ -34,14 +34,12 @@ test.describe('Noisen App UI', () => {
     // Check if we see "Retro"
     await expect(page.getByText('Retro').first()).toBeVisible();
 
-    // Switch to Digital mode by clicking the switch directly
+    // Use click and check text color to verify toggle since shadcn switch uses onCheckedChange
     const modeSwitch = page.getByRole('switch');
     await modeSwitch.evaluate(b => (b as HTMLElement).click());
 
-    // Wait for visual change
+    // Wait for visual change on "Digital" text
     await page.waitForTimeout(1000);
-
-    // Check if "Digital" text now has the accent color
     const modeSwitchLabel = page.getByText('Digital', { exact: true });
     const digitalTextClass = await modeSwitchLabel.getAttribute('class') || '';
     expect(digitalTextClass).toMatch(/text-accent/);

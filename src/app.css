@@ -1,3 +1,107 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-surface: var(--surface);
+}
+
+@layer base {
+  :root {
+    --primary: #d4af37; /* Metallic Gold */
+    --secondary: #a9a9a9; /* Silver / Grey */
+    --tertiary: #505050;
+
+    --background: #f5f5f5; /* Off-white / Silver look for light mode */
+    --surface: #e0e0e0;
+    --foreground: #111111;
+    --border: #cccccc;
+    --accent: #2e8b57; /* LED green style */
+
+    --success: #22c55e;
+    --warning: #f59e0b;
+    --destructive: #ef4444;
+
+    /* Shadcn defaults */
+    --radius: 0.5rem;
+    --card: #ffffff;
+    --card-foreground: #0f172a;
+    --popover: #ffffff;
+    --popover-foreground: #0f172a;
+    --primary-foreground: #ffffff;
+    --secondary-foreground: #ffffff;
+    --muted: #f1f5f9;
+    --muted-foreground: #64748b;
+    --accent-foreground: #ffffff;
+    --destructive-foreground: #ffffff;
+    --input: #e2e8f0;
+    --ring: #94a3b8;
+  }
+
+  .dark {
+    --primary: #d4af37;
+    --secondary: #404040;
+    --tertiary: #202020;
+
+    --background: #1a1a1a; /* Dark brushed metal look */
+    --surface: #2a2a2a;
+    --foreground: #e0e0e0;
+    --border: #333333;
+    --accent: #00ff00;
+
+    --success: #22c55e;
+    --warning: #f59e0b;
+    --destructive: #ef4444;
+
+    /* Shadcn defaults */
+    --card: #0f172a;
+    --card-foreground: #f8fafc;
+    --popover: #0f172a;
+    --popover-foreground: #f8fafc;
+    --primary-foreground: #ffffff;
+    --secondary-foreground: #f8fafc;
+    --muted: #1e293b;
+    --muted-foreground: #94a3b8;
+    --accent-foreground: #f8fafc;
+    --destructive-foreground: #f8fafc;
+    --input: #1e293b;
+    --ring: #334155;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+  }
+}
