@@ -210,13 +210,19 @@
         <div class="grid grid-cols-2 xl:grid-cols-4 gap-y-3 gap-x-2 xl:gap-x-4 w-full bg-panel/30 p-3 rounded-md border border-border/20 shadow-inner h-[80px] xl:h-auto items-center">
           {#each BASE_OPTIONS as option}
             <label class="flex flex-col items-center gap-2 cursor-pointer group">
-              <input type="radio" name="baseNoise" value={option.value} bind:group={baseNoise} class="peer sr-only" />
-              <div class="w-5 h-5 rounded-full border border-black/40 peer-checked:border-primary/50 shadow-[0_2px_4px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.2)] transition-all flex items-center justify-center bg-gradient-to-b from-[#e0e0e0] to-[#999] relative peer-active:scale-95">
-                 <div class="w-3.5 h-3.5 rounded-full bg-background shadow-inner"></div>
-                 <!-- LED Indicator -->
-                 <div class="absolute -top-3 w-1.5 h-1.5 rounded-full bg-black/60 shadow-[inset_0_1px_2px_rgba(0,0,0,0.8)] peer-checked:bg-accent peer-checked:shadow-[0_0_6px_var(--accent),inset_0_1px_1px_rgba(255,255,255,0.4)] transition-all duration-300"></div>
+              <input type="radio" name="baseNoise" value={option.value} bind:group={baseNoise} class="peer/base sr-only" />
+
+              <!-- Switch Housing -->
+              <div class="w-8 h-10 rounded-sm bg-panel shadow-[inset_0_2px_6px_rgba(0,0,0,0.8),0_1px_0_rgba(255,255,255,0.15)] border border-black/60 p-[2px] flex flex-col items-center justify-end relative">
+
+                <!-- LED Indicator -->
+                <div class="absolute top-1.5 w-1.5 h-1.5 rounded-full bg-black/60 shadow-[inset_0_1px_2px_rgba(0,0,0,0.8)] peer-checked/base:bg-accent peer-checked/base:shadow-[0_0_6px_var(--accent),inset_0_1px_1px_rgba(255,255,255,0.4)] transition-all duration-300"></div>
+
+                <!-- Moving Button Cap -->
+                <div class="w-full h-5 rounded-[2px] bg-gradient-to-b from-[#e8e8e8] to-[#999] dark:from-[#555] dark:to-[#222] shadow-[0_4px_4px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.6),inset_0_-1px_1px_rgba(0,0,0,0.3)] border border-black/50 transition-all duration-150 peer-checked/base:translate-y-[3px] peer-checked/base:shadow-[0_1px_1px_rgba(0,0,0,0.8),inset_0_1px_1px_rgba(255,255,255,0.3),inset_0_-1px_1px_rgba(0,0,0,0.5)] peer-active/base:translate-y-[3px] peer-active/base:shadow-[0_1px_1px_rgba(0,0,0,0.8),inset_0_1px_1px_rgba(255,255,255,0.3),inset_0_-1px_1px_rgba(0,0,0,0.5)]"></div>
               </div>
-              <span class="font-mono text-[8px] tracking-widest text-secondary group-hover:text-primary peer-checked:text-accent transition-colors font-bold peer-checked:drop-shadow-[0_0_2px_rgba(255,51,51,0.3)]">{option.label}</span>
+
+              <span class="font-mono text-[8px] tracking-widest text-secondary group-hover:text-primary peer-checked/base:text-accent transition-colors font-bold peer-checked/base:drop-shadow-[0_0_2px_rgba(255,51,51,0.3)]">{option.label}</span>
             </label>
           {/each}
         </div>
@@ -232,10 +238,14 @@
               class="flex flex-col items-center gap-2 cursor-pointer group bg-transparent border-none p-0 outline-none"
               onclick={() => toggleAmbient(option.value)}
             >
-              <!-- Toggle visually behaves like push button -->
-              <div class="w-5 h-5 rounded-md border border-black/40 shadow-[0_2px_4px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.2)] transition-all flex items-center justify-center bg-gradient-to-b from-[#e0e0e0] to-[#999] relative active:scale-95 {ambientState[option.value] ? 'border-primary/50' : ''}">
-                 <div class="w-3 h-3 rounded-sm bg-background shadow-inner"></div>
-                 <div class="absolute -top-3 w-1.5 h-1.5 rounded-full bg-black/60 shadow-[inset_0_1px_2px_rgba(0,0,0,0.8)] transition-all duration-300 {ambientState[option.value] ? 'bg-primary shadow-[0_0_6px_var(--primary),inset_0_1px_1px_rgba(255,255,255,0.4)]' : ''}"></div>
+              <!-- Switch Housing -->
+              <div class="w-8 h-10 rounded-sm bg-panel shadow-[inset_0_2px_6px_rgba(0,0,0,0.8),0_1px_0_rgba(255,255,255,0.15)] border border-black/60 p-[2px] flex flex-col items-center justify-end relative">
+
+                <!-- LED Indicator -->
+                <div class="absolute top-1.5 w-1.5 h-1.5 rounded-full bg-black/60 shadow-[inset_0_1px_2px_rgba(0,0,0,0.8)] transition-all duration-300 {ambientState[option.value] ? 'bg-primary shadow-[0_0_6px_var(--primary),inset_0_1px_1px_rgba(255,255,255,0.4)]' : ''}"></div>
+
+                <!-- Moving Button Cap -->
+                <div class="w-full h-5 rounded-[2px] bg-gradient-to-b from-[#e8e8e8] to-[#999] dark:from-[#555] dark:to-[#222] border border-black/50 transition-all duration-150 active:translate-y-[3px] active:shadow-[0_1px_1px_rgba(0,0,0,0.8),inset_0_1px_1px_rgba(255,255,255,0.3),inset_0_-1px_1px_rgba(0,0,0,0.5)] {ambientState[option.value] ? 'translate-y-[3px] shadow-[0_1px_1px_rgba(0,0,0,0.8),inset_0_1px_1px_rgba(255,255,255,0.3),inset_0_-1px_1px_rgba(0,0,0,0.5)]' : 'shadow-[0_4px_4px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.6),inset_0_-1px_1px_rgba(0,0,0,0.3)]'}"></div>
               </div>
               <span class="font-mono text-[8px] tracking-widest transition-colors font-bold {ambientState[option.value] ? 'text-primary drop-shadow-[0_0_2px_rgba(212,175,55,0.3)]' : 'text-secondary group-hover:text-primary/70'}">{option.label}</span>
             </button>
