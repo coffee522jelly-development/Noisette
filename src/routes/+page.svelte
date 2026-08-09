@@ -207,7 +207,7 @@
       <!-- Oscillator Source (Radio behavior) -->
       <div class="flex-1">
         <h3 class="text-[10px] font-mono text-engraved uppercase tracking-[0.2em] border-b border-border/30 pb-1 mb-2 ml-2">Base Noise</h3>
-        <div class="grid grid-cols-2 xl:grid-cols-4 gap-y-3 gap-x-2 xl:gap-x-4 w-full bg-panel/30 p-3 rounded-md border border-border/20 shadow-inner h-[80px] xl:h-auto items-center">
+        <div class="grid grid-cols-2 xl:grid-cols-4 gap-y-4 gap-x-2 xl:gap-x-4 w-full bg-panel/30 p-4 rounded-md border border-border/20 shadow-inner h-auto min-h-[90px] items-start">
           {#each BASE_OPTIONS as option}
             <button
               type="button"
@@ -215,16 +215,16 @@
               onclick={() => { baseNoise = option.value; }}
             >
               <!-- Switch Housing -->
-              <div class="w-8 h-10 rounded-sm bg-panel shadow-[inset_0_2px_6px_rgba(0,0,0,0.8),0_1px_0_rgba(255,255,255,0.15)] border border-black/60 p-[2px] flex flex-col items-center justify-end relative">
+              <div class="w-8 h-10 rounded-sm bg-panel shadow-[inset_0_2px_6px_rgba(0,0,0,0.8),0_1px_0_rgba(255,255,255,0.15)] border border-black/60 p-[2px] flex flex-col items-center justify-end relative shrink-0">
 
                 <!-- LED Indicator -->
-                <div class="absolute top-1.5 w-1.5 h-1.5 rounded-full bg-black/60 shadow-[inset_0_1px_2px_rgba(0,0,0,0.8)] transition-all duration-300 {baseNoise === option.value ? 'bg-accent shadow-[0_0_6px_var(--accent),inset_0_1px_1px_rgba(255,255,255,0.4)]' : ''}"></div>
+                <div class="absolute top-1.5 w-1.5 h-1.5 rounded-full transition-all duration-300 {baseNoise === option.value ? 'bg-accent shadow-[0_0_6px_var(--accent),inset_0_1px_1px_rgba(255,255,255,0.4)]' : 'bg-black/60 shadow-[inset_0_1px_2px_rgba(0,0,0,0.8)]'}"></div>
 
                 <!-- Moving Button Cap -->
                 <div class="w-full h-5 rounded-[2px] bg-gradient-to-b from-[#e8e8e8] to-[#999] dark:from-[#555] dark:to-[#222] border border-black/50 transition-all duration-150 active:translate-y-[3px] active:shadow-[0_1px_1px_rgba(0,0,0,0.8),inset_0_1px_1px_rgba(255,255,255,0.3),inset_0_-1px_1px_rgba(0,0,0,0.5)] {baseNoise === option.value ? 'translate-y-[3px] shadow-[0_1px_1px_rgba(0,0,0,0.8),inset_0_1px_1px_rgba(255,255,255,0.3),inset_0_-1px_1px_rgba(0,0,0,0.5)]' : 'shadow-[0_4px_4px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.6),inset_0_-1px_1px_rgba(0,0,0,0.3)]'}"></div>
               </div>
 
-              <span class="font-mono text-[8px] tracking-widest transition-colors font-bold {baseNoise === option.value ? 'text-accent drop-shadow-[0_0_2px_rgba(255,51,51,0.3)]' : 'text-secondary group-hover:text-primary'}">{option.label}</span>
+              <span class="font-mono text-[8px] tracking-widest transition-colors font-bold whitespace-nowrap {baseNoise === option.value ? 'text-accent drop-shadow-[0_0_2px_rgba(255,51,51,0.3)]' : 'text-secondary group-hover:text-primary'}">{option.label}</span>
             </button>
           {/each}
         </div>
@@ -233,7 +233,7 @@
       <!-- Ambient Effectors (Toggle behavior) -->
       <div class="flex-1">
         <h3 class="text-[10px] font-mono text-engraved uppercase tracking-[0.2em] border-b border-border/30 pb-1 mb-2 ml-2">Ambient Mix</h3>
-        <div class="grid grid-cols-2 xl:grid-cols-4 gap-y-3 gap-x-2 xl:gap-x-4 w-full bg-panel/30 p-3 rounded-md border border-border/20 shadow-inner h-[80px] xl:h-auto items-center">
+        <div class="grid grid-cols-2 xl:grid-cols-4 gap-y-4 gap-x-2 xl:gap-x-4 w-full bg-panel/30 p-4 rounded-md border border-border/20 shadow-inner h-auto min-h-[90px] items-start">
           {#each AMBIENT_OPTIONS as option}
             <button
               type="button"
@@ -241,15 +241,15 @@
               onclick={() => toggleAmbient(option.value)}
             >
               <!-- Switch Housing -->
-              <div class="w-8 h-10 rounded-sm bg-panel shadow-[inset_0_2px_6px_rgba(0,0,0,0.8),0_1px_0_rgba(255,255,255,0.15)] border border-black/60 p-[2px] flex flex-col items-center justify-end relative">
+              <div class="w-8 h-10 rounded-sm bg-panel shadow-[inset_0_2px_6px_rgba(0,0,0,0.8),0_1px_0_rgba(255,255,255,0.15)] border border-black/60 p-[2px] flex flex-col items-center justify-end relative shrink-0">
 
                 <!-- LED Indicator -->
-                <div class="absolute top-1.5 w-1.5 h-1.5 rounded-full bg-black/60 shadow-[inset_0_1px_2px_rgba(0,0,0,0.8)] transition-all duration-300 {ambientState[option.value] ? 'bg-primary shadow-[0_0_6px_var(--primary),inset_0_1px_1px_rgba(255,255,255,0.4)]' : ''}"></div>
+                <div class="absolute top-1.5 w-1.5 h-1.5 rounded-full transition-all duration-300 {ambientState[option.value] ? 'bg-primary shadow-[0_0_6px_var(--primary),inset_0_1px_1px_rgba(255,255,255,0.4)]' : 'bg-black/60 shadow-[inset_0_1px_2px_rgba(0,0,0,0.8)]'}"></div>
 
                 <!-- Moving Button Cap -->
                 <div class="w-full h-5 rounded-[2px] bg-gradient-to-b from-[#e8e8e8] to-[#999] dark:from-[#555] dark:to-[#222] border border-black/50 transition-all duration-150 active:translate-y-[3px] active:shadow-[0_1px_1px_rgba(0,0,0,0.8),inset_0_1px_1px_rgba(255,255,255,0.3),inset_0_-1px_1px_rgba(0,0,0,0.5)] {ambientState[option.value] ? 'translate-y-[3px] shadow-[0_1px_1px_rgba(0,0,0,0.8),inset_0_1px_1px_rgba(255,255,255,0.3),inset_0_-1px_1px_rgba(0,0,0,0.5)]' : 'shadow-[0_4px_4px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.6),inset_0_-1px_1px_rgba(0,0,0,0.3)]'}"></div>
               </div>
-              <span class="font-mono text-[8px] tracking-widest transition-colors font-bold {ambientState[option.value] ? 'text-primary drop-shadow-[0_0_2px_rgba(212,175,55,0.3)]' : 'text-secondary group-hover:text-primary/70'}">{option.label}</span>
+              <span class="font-mono text-[8px] tracking-widest transition-colors font-bold whitespace-nowrap {ambientState[option.value] ? 'text-primary drop-shadow-[0_0_2px_rgba(212,175,55,0.3)]' : 'text-secondary group-hover:text-primary/70'}">{option.label}</span>
             </button>
           {/each}
         </div>
