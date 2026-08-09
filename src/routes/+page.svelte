@@ -163,14 +163,14 @@
     <!-- Main Power Button (Moved to Logo Header) -->
     <div class="flex flex-col items-center shrink-0 order-2 xl:order-none xl:self-center xl:mr-2">
       <button
-        class="w-10 h-10 xl:w-12 xl:h-12 rounded-full border border-black/40 {isPlaying ? 'bg-primary/20' : 'bg-gradient-to-b from-[#f0f0f0] to-[#b0b0b0]'} shadow-[0_6px_8px_rgba(0,0,0,0.6),inset_0_1px_1px_rgba(255,255,255,0.4)] flex items-center justify-center transition-all active:scale-95 active:shadow-[0_1px_2px_rgba(0,0,0,0.5)] z-20 relative"
+        class="w-10 h-10 xl:w-12 xl:h-12 rounded-full border border-black/40 {isPlaying ? 'bg-primary/20' : 'bg-gradient-to-b from-[#f0f0f0] to-[#b0b0b0]'} shadow-[0_6px_8px_rgba(0,0,0,0.6),inset_0_1px_1px_rgba(255,255,255,0.4)] flex items-center justify-center transition-all active:scale-95 active:shadow-[0_1px_2px_rgba(0,0,0,0.5)] z-20 relative group"
         onclick={togglePlay}
         aria-label="Play"
       >
-        <Power class="w-5 h-5 xl:w-6 xl:h-6 {isPlaying ? 'text-primary drop-shadow-[0_0_4px_var(--primary)]' : 'text-black/60'}" />
-        <div class="absolute -top-3 w-1.5 h-1.5 rounded-full {isPlaying ? 'bg-accent shadow-[0_0_5px_var(--accent)]' : 'bg-black/50 shadow-inner'} z-10 left-1/2 -translate-x-1/2"></div>
+        <Power class="w-5 h-5 xl:w-6 xl:h-6 transition-all duration-300 {isPlaying ? 'text-primary drop-shadow-[0_0_6px_var(--primary)]' : 'text-black/60 group-hover:text-black/80 dark:text-black/90 dark:group-hover:text-black/60'}" />
+        <div class="absolute -top-3 w-1.5 h-1.5 rounded-full z-10 left-1/2 -translate-x-1/2 transition-all duration-300 {isPlaying ? 'bg-accent shadow-[0_0_6px_var(--accent),inset_0_1px_1px_rgba(255,255,255,0.4)]' : 'bg-black/60 shadow-[inset_0_1px_2px_rgba(0,0,0,0.8)]'}"></div>
       </button>
-      <span class="mt-2 text-[8px] xl:text-[10px] font-mono text-engraved tracking-widest z-10">POWER</span>
+      <span class="mt-2 text-[8px] xl:text-[10px] font-mono text-engraved tracking-widest z-10 transition-colors {isPlaying ? 'text-primary drop-shadow-[0_0_2px_rgba(212,175,55,0.3)]' : ''}">POWER</span>
     </div>
   </div>
 
@@ -214,9 +214,9 @@
               <div class="w-5 h-5 rounded-full border border-black/40 peer-checked:border-primary/50 shadow-[0_2px_4px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.2)] transition-all flex items-center justify-center bg-gradient-to-b from-[#e0e0e0] to-[#999] relative peer-active:scale-95">
                  <div class="w-3.5 h-3.5 rounded-full bg-background shadow-inner"></div>
                  <!-- LED Indicator -->
-                 <div class="absolute -top-3 w-1 h-1 rounded-full bg-black/50 shadow-inner peer-checked:bg-accent peer-checked:shadow-[0_0_4px_var(--accent)] transition-colors"></div>
+                 <div class="absolute -top-3 w-1.5 h-1.5 rounded-full bg-black/60 shadow-[inset_0_1px_2px_rgba(0,0,0,0.8)] peer-checked:bg-accent peer-checked:shadow-[0_0_6px_var(--accent),inset_0_1px_1px_rgba(255,255,255,0.4)] transition-all duration-300"></div>
               </div>
-              <span class="font-mono text-[8px] tracking-widest text-secondary group-hover:text-primary transition-colors">{option.label}</span>
+              <span class="font-mono text-[8px] tracking-widest text-secondary group-hover:text-primary peer-checked:text-accent transition-colors font-bold peer-checked:drop-shadow-[0_0_2px_rgba(255,51,51,0.3)]">{option.label}</span>
             </label>
           {/each}
         </div>
@@ -235,9 +235,9 @@
               <!-- Toggle visually behaves like push button -->
               <div class="w-5 h-5 rounded-md border border-black/40 shadow-[0_2px_4px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.2)] transition-all flex items-center justify-center bg-gradient-to-b from-[#e0e0e0] to-[#999] relative active:scale-95 {ambientState[option.value] ? 'border-primary/50' : ''}">
                  <div class="w-3 h-3 rounded-sm bg-background shadow-inner"></div>
-                 <div class="absolute -top-3 w-1 h-1 rounded-full bg-black/50 shadow-inner transition-colors {ambientState[option.value] ? 'bg-primary shadow-[0_0_4px_var(--primary)]' : ''}"></div>
+                 <div class="absolute -top-3 w-1.5 h-1.5 rounded-full bg-black/60 shadow-[inset_0_1px_2px_rgba(0,0,0,0.8)] transition-all duration-300 {ambientState[option.value] ? 'bg-primary shadow-[0_0_6px_var(--primary),inset_0_1px_1px_rgba(255,255,255,0.4)]' : ''}"></div>
               </div>
-              <span class="font-mono text-[8px] tracking-widest text-secondary group-hover:text-primary transition-colors">{option.label}</span>
+              <span class="font-mono text-[8px] tracking-widest transition-colors font-bold {ambientState[option.value] ? 'text-primary drop-shadow-[0_0_2px_rgba(212,175,55,0.3)]' : 'text-secondary group-hover:text-primary/70'}">{option.label}</span>
             </button>
           {/each}
         </div>
