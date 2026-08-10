@@ -34,21 +34,7 @@
 </script>
 
 <div class="min-h-screen bg-[var(--background)] text-[var(--foreground)] font-sans antialiased flex flex-col">
-  <header class="p-4 flex justify-end">
-    <button
-      class="p-2 rounded-full bg-[var(--surface)] text-[var(--foreground)] border border-[var(--border)] hover:bg-[var(--panel)] transition-colors shadow-sm"
-      onclick={toggleTheme}
-      aria-label="Toggle Theme Mode"
-    >
-      {#if isDark}
-        <Sun class="w-5 h-5" />
-      {:else}
-        <Moon class="w-5 h-5" />
-      {/if}
-    </button>
-  </header>
-
-  <main class="flex-1 flex flex-col items-center justify-center p-4 sm:p-8 w-full max-w-6xl mx-auto overflow-y-auto overflow-x-hidden">
+  <main class="flex-1 flex flex-col items-center justify-center p-0 w-full h-full mx-auto overflow-hidden">
     {@render children()}
   </main>
 </div>
