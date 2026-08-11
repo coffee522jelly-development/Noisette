@@ -220,7 +220,7 @@
   </div>
 
   <!-- Panels Container for Horizontal layout -->
-  <div class="flex flex-col xl:flex-row flex-1 gap-4 xl:gap-4 justify-center items-center xl:items-stretch">
+  <div class="flex flex-col xl:flex-row flex-1 gap-4 xl:gap-4 justify-center items-stretch xl:items-stretch">
 
     <!-- VU Meters Display Panel -->
     <div class="w-full xl:flex-1 bg-panel p-4 rounded border border-border shadow-recessed relative">
@@ -252,7 +252,7 @@
       <!-- Oscillator Source (Radio behavior) -->
       <div class="flex-1">
         <h3 class="text-[10px] font-mono text-engraved uppercase tracking-[0.2em] border-b border-border/30 pb-1 mb-2 ml-2">Base Noise</h3>
-        <div class="grid grid-cols-2 xl:grid-cols-4 gap-y-4 gap-x-2 xl:gap-x-4 w-full bg-panel/30 p-4 rounded-md border border-border/20 shadow-inner h-auto min-h-[90px] items-start">
+        <div class="grid grid-cols-4 gap-y-4 gap-x-2 xl:gap-x-4 w-full bg-panel/30 p-4 rounded-md border border-border/20 shadow-inner h-auto min-h-[90px] items-start">
           {#each BASE_OPTIONS as option}
             <button
               type="button"
@@ -278,7 +278,7 @@
       <!-- Ambient Effectors (Toggle behavior) -->
       <div class="flex-1">
         <h3 class="text-[10px] font-mono text-engraved uppercase tracking-[0.2em] border-b border-border/30 pb-1 mb-2 ml-2">Ambient Mix</h3>
-        <div class="grid grid-cols-2 xl:grid-cols-4 gap-y-4 gap-x-2 xl:gap-x-4 w-full bg-panel/30 p-4 rounded-md border border-border/20 shadow-inner h-auto min-h-[90px] items-start">
+        <div class="grid grid-cols-4 gap-y-4 gap-x-2 xl:gap-x-4 w-full bg-panel/30 p-4 rounded-md border border-border/20 shadow-inner h-auto min-h-[90px] items-start">
           {#each AMBIENT_OPTIONS as option}
             <button
               type="button"
@@ -302,19 +302,19 @@
     </div>
 
     <!-- Filters & Output Panel -->
-    <div class="w-full xl:flex-[1.5] flex flex-col xl:flex-row gap-4">
-      <div class="flex-1 flex flex-col">
+    <div class="w-full xl:flex-[1.5] flex flex-row xl:flex-row gap-4">
+      <div class="flex-[1.2] flex flex-col">
         <h3 class="text-[10px] font-mono text-engraved uppercase tracking-[0.2em] border-b border-border/30 pb-1 mb-2 ml-2">Filters</h3>
-        <div class="flex xl:flex-col justify-around xl:justify-center xl:gap-4 items-center bg-panel/30 p-3 rounded-md border border-border/20 shadow-inner flex-1 xl:py-6">
+        <div class="flex flex-row xl:flex-col justify-around xl:justify-center xl:gap-4 items-center bg-panel/30 p-3 rounded-md border border-border/20 shadow-inner flex-1 xl:py-6">
           <Knob bind:value={highpass} min={20} max={5000} step={10} size={45} label="HPF" />
           <Knob bind:value={lowpass} min={500} max={20000} step={10} size={45} label="LPF" />
         </div>
       </div>
 
-      <div class="flex-[1.5] flex flex-col">
+      <div class="flex-1 flex flex-col">
         <h3 class="text-[10px] font-mono text-engraved uppercase tracking-[0.2em] border-b border-border/30 pb-1 mb-2 ml-2">Output</h3>
         <div class="flex justify-center items-center bg-panel/30 p-3 rounded-md border border-border/20 shadow-inner flex-1">
-          <Knob bind:value={volume} min={0} max={100} step={1} size={65} label="Level" />
+          <Knob bind:value={volume} min={0} max={100} step={1} size={60} label="Level" />
         </div>
       </div>
     </div>
