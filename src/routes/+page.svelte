@@ -3,10 +3,11 @@
   import { AudioGenerator, type BaseNoiseType, type AmbientNoiseType } from '$lib/audio';
   import VUMeter from '$lib/components/VUMeter.svelte';
   import Knob from '$lib/components/Knob.svelte';
+  import SpectrumAnalyzer from '$lib/components/SpectrumAnalyzer.svelte';
   import { Switch } from '$lib/components/ui/switch';
   import { Power, Sun, Moon } from '@lucide/svelte';
 
-  let audioGen: AudioGenerator;
+  let audioGen = $state<AudioGenerator>();
 
   let isPlaying = $state(false);
   let volume = $state(50);
@@ -71,7 +72,7 @@
 
   onDestroy(() => {
     if (audioGen) {
-      audioGen.stop();
+      audioGen?.stop();
     }
     if (animationFrame) {
       cancelAnimationFrame(animationFrame);
@@ -80,10 +81,10 @@
 
   function togglePlay() {
     if (isPlaying) {
-      audioGen.stop();
+      audioGen?.stop();
       isPlaying = false;
     } else {
-      audioGen.play();
+      audioGen?.play();
       isPlaying = true;
     }
   }
@@ -215,6 +216,13 @@
           <div class="absolute -top-3 w-1.5 h-1.5 rounded-full z-10 left-1/2 -translate-x-1/2 transition-all duration-300 {isPlaying ? 'bg-accent shadow-[0_0_6px_var(--accent),inset_0_1px_1px_rgba(255,255,255,0.4)]' : 'bg-black/60 shadow-[inset_0_1px_2px_rgba(0,0,0,0.8)]'}"></div>
         </button>
         <span class="mt-2 text-[8px] xl:text-[10px] font-mono text-engraved tracking-widest z-10 transition-colors {isPlaying ? 'text-primary drop-shadow-[0_0_2px_rgba(212,175,55,0.3)]' : ''}">POWER</span>
+      </div>
+
+      <!-- Spectrum Analyzer (Horizontal Only) -->
+      <div class="hidden xl:flex flex-col items-center">
+        {#if audioGen}
+          <SpectrumAnalyzer {audioGen} {isPlaying} />
+        {/if}
       </div>
     </div>
   </div>

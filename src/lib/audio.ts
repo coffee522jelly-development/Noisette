@@ -393,6 +393,16 @@ export class AudioGenerator {
     }
   }
 
+
+  public getSpectrumData(): Uint8Array {
+    if (!this.isPlaying || !this.analyserLeft) {
+      return new Uint8Array(128); // default empty
+    }
+    const dataArray = new Uint8Array(this.analyserLeft.frequencyBinCount);
+    this.analyserLeft.getByteFrequencyData(dataArray);
+    return dataArray;
+  }
+
   public getLevels(): { left: number, right: number } {
     if (!this.isPlaying || !this.analyserLeft || !this.analyserRight || !this.dataArrayLeft || !this.dataArrayRight) {
       return { left: 0, right: 0 };
