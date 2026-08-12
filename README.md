@@ -1,7 +1,76 @@
-# Tauri + SvelteKit
+# Noisette (ノワゼット)
 
-This template should help get you started developing with Tauri and SvelteKit in Vite.
+Noisetteは、高級オーディオ機材を彷彿とさせる洗練されたデザインが特徴の、デスクトップ向けリファレンス・ノイズジェネレーターです。
 
-## Recommended IDE Setup
+Tauri v2とSvelteKitを活用して開発されており、Web Audio APIを用いて全てのサウンドをプロシージャルに生成します。
 
-[VS Code](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer).
+## 概要
+
+作業中の集中力向上、リラクゼーション、またはオーディオ機器のテスト用など、様々な用途で活用できる高品質な環境音を提供します。
+UIは、アナログシンセサイザーや高級ラックマウント機材のような直感的で物理的な操作感（重厚なボタン、VUメーター、LEDインジケーターなど）を追求しています。
+
+## 主な機能
+
+*   **ベースノイズ生成:** ホワイト、ピンク、ブラウン、グリーンの4種類のノイズから選択可能。
+*   **環境音のミックス (Ambient Mix):** ラジオのホワイトノイズ、カセットテープのヒスノイズ、カフェの喧騒、雨音を任意に重ね合わせることが可能。
+*   **フィルター制御:** ハイパスフィルター (HPF) およびローパスフィルター (LPF) による詳細な音質調整。
+*   **デュアルVUメーター:** L/Rチャンネルの出力レベルをリアルタイムに視覚化。
+    *   **Retroモード:** 白熱電球風のバックライトとアナログ針を備えたクラシックなメーター。
+    *   **Digitalモード:** 16セグメントのLEDバーグラフとPEAKインジケーターを備えたモダンなメーター。
+*   **レスポンシブデザイン:** 縦長のスタンドアロンデバイス風のレイアウトから、横幅を広げた19インチラックマウント風のレイアウトへシームレスに切り替え。
+*   **システムトレイ統合:** アプリケーションを閉じてもバックグラウンド（システムトレイ）で動作を継続。
+
+## 技術スタック
+
+*   **フロントエンド:** Svelte 5, Tailwind CSS, Shadcn-Svelte
+*   **バックエンド / アプリケーションフレームワーク:** Tauri v2, Rust
+*   **オーディオエンジン:** Web Audio API (プロシージャル生成)
+*   **テスト:** Playwright
+
+## 開発環境のセットアップ
+
+### 前提条件
+*   Node.js (v18以降を推奨)
+*   Rust (最新の安定版)
+*   Tauriの開発に必要な各OSのシステム依存関係 (詳細は [Tauri公式ドキュメント](https://tauri.app/v1/guides/getting-started/prerequisites) を参照)
+
+### インストールと起動
+
+1. リポジトリのクローン
+   ```bash
+   git clone <repository-url>
+   cd Noisette
+   ```
+
+2. 依存関係のインストール
+   ```bash
+   npm install
+   ```
+
+3. 開発サーバーの起動 (SvelteKit + Tauri)
+   ```bash
+   npm run tauri dev
+   ```
+
+### ビルド
+
+本番環境用のインストーラー/実行ファイルをビルドするには以下のコマンドを実行します。
+
+```bash
+npm run tauri build
+```
+ビルドされたファイルは `src-tauri/target/release/bundle/` 配下に生成されます。
+
+### テスト
+
+Playwrightを使用したE2Eテストを実行します。
+
+```bash
+npm run test
+# または
+npx playwright test
+```
+
+## ライセンス
+
+このプロジェクトは独自のライセンスで提供されています。詳細はリポジトリの管理者にお問い合わせください。
