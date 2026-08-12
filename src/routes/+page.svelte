@@ -205,24 +205,26 @@
         <span class="mt-2 text-[7px] xl:text-[8px] font-mono text-engraved tracking-widest z-10">ILLUMINATION</span>
       </div>
 
-      <!-- Main Power Button -->
-      <div class="flex flex-col items-center">
-        <button
-          class="w-10 h-10 xl:w-12 xl:h-12 rounded-full border border-black/40 {isPlaying ? 'bg-primary/20' : 'bg-gradient-to-b from-[#f0f0f0] to-[#b0b0b0]'} shadow-[0_6px_8px_rgba(0,0,0,0.6),inset_0_1px_1px_rgba(255,255,255,0.4)] flex items-center justify-center transition-all active:scale-95 active:shadow-[0_1px_2px_rgba(0,0,0,0.5)] z-20 relative group"
-          onclick={togglePlay}
-          aria-label="Play"
-        >
-          <Power class="w-5 h-5 xl:w-6 xl:h-6 transition-all duration-300 {isPlaying ? 'text-primary drop-shadow-[0_0_6px_var(--primary)]' : 'text-black/60 group-hover:text-black/80 dark:text-black/90 dark:group-hover:text-black/60'}" />
-          <div class="absolute -top-3 w-1.5 h-1.5 rounded-full z-10 left-1/2 -translate-x-1/2 transition-all duration-300 {isPlaying ? 'bg-accent shadow-[0_0_6px_var(--accent),inset_0_1px_1px_rgba(255,255,255,0.4)]' : 'bg-black/60 shadow-[inset_0_1px_2px_rgba(0,0,0,0.8)]'}"></div>
-        </button>
-        <span class="mt-2 text-[8px] xl:text-[10px] font-mono text-engraved tracking-widest z-10 transition-colors {isPlaying ? 'text-primary drop-shadow-[0_0_2px_rgba(212,175,55,0.3)]' : ''}">POWER</span>
-      </div>
+      <div class="flex flex-col items-center xl:gap-4 xl:-mb-14">
+        <!-- Main Power Button -->
+        <div class="flex flex-col items-center">
+          <button
+            class="w-10 h-10 xl:w-12 xl:h-12 rounded-full border border-black/40 {isPlaying ? 'bg-primary/20' : 'bg-gradient-to-b from-[#f0f0f0] to-[#b0b0b0]'} shadow-[0_6px_8px_rgba(0,0,0,0.6),inset_0_1px_1px_rgba(255,255,255,0.4)] flex items-center justify-center transition-all active:scale-95 active:shadow-[0_1px_2px_rgba(0,0,0,0.5)] z-20 relative group"
+            onclick={togglePlay}
+            aria-label="Play"
+          >
+            <Power class="w-5 h-5 xl:w-6 xl:h-6 transition-all duration-300 {isPlaying ? 'text-primary drop-shadow-[0_0_6px_var(--primary)]' : 'text-black/60 group-hover:text-black/80 dark:text-black/90 dark:group-hover:text-black/60'}" />
+            <div class="absolute -top-3 w-1.5 h-1.5 rounded-full z-10 left-1/2 -translate-x-1/2 transition-all duration-300 {isPlaying ? 'bg-accent shadow-[0_0_6px_var(--accent),inset_0_1px_1px_rgba(255,255,255,0.4)]' : 'bg-black/60 shadow-[inset_0_1px_2px_rgba(0,0,0,0.8)]'}"></div>
+          </button>
+          <span class="mt-2 text-[8px] xl:text-[10px] font-mono text-engraved tracking-widest z-10 transition-colors {isPlaying ? 'text-primary drop-shadow-[0_0_2px_rgba(212,175,55,0.3)]' : ''}">POWER</span>
+        </div>
 
-      <!-- Spectrum Analyzer (Horizontal Only) -->
-      <div class="hidden xl:flex flex-col items-center">
-        {#if audioGen}
-          <SpectrumAnalyzer {audioGen} {isPlaying} />
-        {/if}
+        <!-- Spectrum Analyzer (Horizontal Only) -->
+        <div class="hidden xl:flex flex-col items-center mt-2 xl:mt-0 xl:translate-y-4">
+          {#if audioGen}
+            <SpectrumAnalyzer {audioGen} {isPlaying} />
+          {/if}
+        </div>
       </div>
     </div>
   </div>
