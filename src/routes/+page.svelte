@@ -194,17 +194,17 @@
         <!-- Theme Switch (Illumination) -->
         <div class="flex flex-col items-center">
           <button
-            class="w-8 h-8 xl:w-10 xl:h-10 rounded-full border border-black/40 bg-gradient-to-b from-[#f0f0f0] to-[#b0b0b0] shadow-[0_4px_6px_rgba(0,0,0,0.6),inset_0_1px_1px_rgba(255,255,255,0.4)] flex items-center justify-center transition-all active:scale-95 active:shadow-[0_1px_2px_rgba(0,0,0,0.5)] z-20 relative group"
+            class="w-10 h-10 xl:w-12 xl:h-12 rounded-full border border-black/40 bg-gradient-to-b from-[#f0f0f0] to-[#b0b0b0] shadow-[0_6px_8px_rgba(0,0,0,0.6),inset_0_1px_1px_rgba(255,255,255,0.4)] flex items-center justify-center transition-all active:scale-95 active:shadow-[0_1px_2px_rgba(0,0,0,0.5)] z-20 relative group"
             onclick={toggleTheme}
             aria-label="Toggle Illumination"
           >
             {#if isDark}
-              <Moon class="w-4 h-4 xl:w-5 xl:h-5 text-accent drop-shadow-[0_0_4px_var(--accent)]" />
+              <Moon class="w-5 h-5 xl:w-6 xl:h-6 text-accent drop-shadow-[0_0_4px_var(--accent)]" />
             {:else}
-              <Sun class="w-4 h-4 xl:w-5 xl:h-5 text-black/60 group-hover:text-black/80" />
+              <Sun class="w-5 h-5 xl:w-6 xl:h-6 text-black/60 group-hover:text-black/80" />
             {/if}
           </button>
-          <span class="mt-2 text-[7px] xl:text-[8px] font-mono text-engraved tracking-widest z-10">ILLUMINATION</span>
+          <span class="mt-2 text-[8px] xl:text-[10px] font-mono text-engraved tracking-widest z-10">ILLUMINATION</span>
         </div>
 
         <!-- Main Power Button -->
@@ -229,9 +229,13 @@
           <SpectrumAnalyzer {audioGen} {isPlaying} />
         {/if}
         <!-- Filter Frequency Info -->
-        <div class="flex flex-row justify-between w-64 mt-2 px-1">
-          <span class="text-[8px] font-mono text-secondary tracking-widest"><span class="opacity-60">LC:</span> {highpass}Hz</span>
-          <span class="text-[8px] font-mono text-secondary tracking-widest"><span class="opacity-60">HC:</span> {lowpass}Hz</span>
+        <span class="mb-1 text-[8px] font-mono text-engraved tracking-widest uppercase mt-4">LF/HF Freq</span>
+        <div class="flex flex-row justify-between w-64 bg-[#080808] border-[2px] border-border rounded shadow-[inset_0_2px_8px_rgba(0,0,0,0.9),0_1px_0_rgba(255,255,255,0.1)] px-2 py-1 relative overflow-hidden">
+          <!-- Glass Reflection Overlay -->
+          <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-[rgba(255,255,255,0.02)] to-[rgba(255,255,255,0.1)] pointer-events-none z-20 mix-blend-screen rounded"></div>
+
+          <span class="text-[9px] font-mono tracking-widest text-[#11ff11] drop-shadow-[0_0_4px_#11ff11] z-10"><span class="opacity-50">LC:</span> {highpass}Hz</span>
+          <span class="text-[9px] font-mono tracking-widest text-[#11ff11] drop-shadow-[0_0_4px_#11ff11] z-10"><span class="opacity-50">HC:</span> {lowpass}Hz</span>
         </div>
       </div>
     </div>
