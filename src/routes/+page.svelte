@@ -223,7 +223,7 @@
     </div>
 
     <!-- Bottom Section: Spectrum Analyzer (Horizontal Only) -->
-    <div class="hidden xl:flex xl:flex-col xl:items-start w-full mt-auto">
+    <div class="hidden xl:flex xl:flex-col xl:items-center xl:justify-center w-full mt-auto mb-auto h-full flex-1">
       <div class="flex flex-col items-center self-center w-full">
         {#if audioGen}
           <SpectrumAnalyzer {audioGen} {isPlaying} />
