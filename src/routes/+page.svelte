@@ -172,15 +172,20 @@
   <div class="hidden xl:flex absolute bottom-[2px] right-4 w-3 h-3 rounded-full bg-screw border border-black/50 shadow-[inset_0_1px_2px_rgba(0,0,0,0.5),0_1px_0_rgba(255,255,255,0.2)] items-center justify-center scale-75"><div class="w-full h-px bg-black/40 rotate-180"></div></div>
   <div class="hidden xl:flex absolute bottom-[2px] right-12 w-3 h-3 rounded-full bg-screw border border-black/50 shadow-[inset_0_1px_2px_rgba(0,0,0,0.5),0_1px_0_rgba(255,255,255,0.2)] items-center justify-center scale-75"><div class="w-full h-px bg-black/40 -rotate-12"></div></div>
 
-  <!-- Left Panel: Branding & Controls (Horizontal Layout) -->
-  <div class="xl:flex xl:flex-col xl:justify-between xl:border-b-0 xl:border-r xl:pr-6 text-center w-full xl:w-auto flex justify-between items-center mb-6 xl:mb-0 px-4 xl:px-0 border-b border-border/50 pb-2 xl:pb-0 shrink-0 h-full py-2">
+  <!-- Header / Branding -->
+  <div class="xl:flex xl:flex-col xl:justify-between xl:border-b-0 xl:border-r xl:pr-6 text-center w-full xl:w-auto flex flex-col justify-between items-center mb-6 xl:mb-0 px-4 xl:px-0 border-b border-border/50 pb-2 xl:pb-0 shrink-0 h-full py-2">
 
-    <!-- Top Section: Logo & Power Buttons -->
-    <div class="xl:flex xl:flex-row xl:justify-between xl:items-start w-full xl:gap-8 flex-1">
-      <div class="flex flex-col justify-between h-full w-full xl:w-auto">
+    <!-- Top Section: Logo, Model & Power Buttons -->
+    <div class="flex flex-row xl:flex-row justify-between xl:items-start w-full xl:gap-8 flex-1">
+      <div class="flex flex-col justify-between h-full w-auto">
         <div class="xl:mb-4 order-1 xl:order-none text-left xl:text-left mr-auto xl:mr-0">
           <h1 class="text-2xl xl:text-4xl font-black tracking-[0.3em] xl:tracking-[0.2em] text-primary drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)] m-0 leading-none" style="text-shadow: 0px 1px 0px rgba(255,255,255,0.2), 0px -1px 0px rgba(0,0,0,0.8);">NOISETTE</h1>
           <p class="text-[8px] xl:text-[9px] uppercase tracking-[0.4em] text-secondary mt-1 xl:mt-2 font-mono">Reference Noise Generator</p>
+        </div>
+
+        <div class="hidden xl:block text-left mt-auto">
+          <p class="text-[10px] font-mono text-secondary">MODEL N-01</p>
+          <p class="text-[8px] font-mono text-secondary opacity-60">AC 100V 50/60Hz</p>
         </div>
       </div>
 
@@ -217,15 +222,9 @@
       </div>
     </div>
 
-    <!-- Bottom Section: Info & Spectrum Analyzer (Horizontal Only) -->
-    <div class="hidden xl:flex xl:flex-row xl:justify-between xl:items-end w-full mt-auto">
-      <div class="text-left mb-2">
-        <p class="text-[10px] font-mono text-secondary">MODEL N-01</p>
-        <p class="text-[8px] font-mono text-secondary opacity-60">AC 100V 50/60Hz</p>
-      </div>
-
-      <!-- Spectrum Analyzer (Horizontal Only) -->
-      <div class="flex flex-col items-center">
+    <!-- Bottom Section: Spectrum Analyzer (Horizontal Only) -->
+    <div class="hidden xl:flex xl:flex-col xl:items-start w-full mt-auto">
+      <div class="flex flex-col items-center self-center w-full">
         {#if audioGen}
           <SpectrumAnalyzer {audioGen} {isPlaying} />
         {/if}
