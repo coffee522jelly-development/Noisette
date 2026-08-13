@@ -172,40 +172,36 @@
   <div class="hidden xl:flex absolute bottom-[2px] right-4 w-3 h-3 rounded-full bg-screw border border-black/50 shadow-[inset_0_1px_2px_rgba(0,0,0,0.5),0_1px_0_rgba(255,255,255,0.2)] items-center justify-center scale-75"><div class="w-full h-px bg-black/40 rotate-180"></div></div>
   <div class="hidden xl:flex absolute bottom-[2px] right-12 w-3 h-3 rounded-full bg-screw border border-black/50 shadow-[inset_0_1px_2px_rgba(0,0,0,0.5),0_1px_0_rgba(255,255,255,0.2)] items-center justify-center scale-75"><div class="w-full h-px bg-black/40 -rotate-12"></div></div>
 
-  <!-- Header / Branding -->
-  <div class="xl:flex xl:flex-row xl:justify-between xl:border-b-0 xl:border-r xl:pr-6 text-center w-full xl:w-auto flex justify-between items-center mb-6 xl:mb-0 px-4 xl:px-0 border-b border-border/50 pb-2 xl:pb-0 shrink-0 h-full py-2 xl:gap-8">
-    <div class="flex flex-col justify-between h-full">
-      <div class="xl:mb-4 xl:mt-auto order-1 xl:order-none text-left xl:text-left mr-auto xl:mr-0">
-        <h1 class="text-2xl xl:text-4xl font-black tracking-[0.3em] xl:tracking-[0.2em] text-primary drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)] m-0 leading-none" style="text-shadow: 0px 1px 0px rgba(255,255,255,0.2), 0px -1px 0px rgba(0,0,0,0.8);">NOISETTE</h1>
-        <p class="text-[8px] xl:text-[9px] uppercase tracking-[0.4em] text-secondary mt-1 xl:mt-2 font-mono">Reference Noise Generator</p>
+  <!-- Left Panel: Branding & Controls (Horizontal Layout) -->
+  <div class="xl:flex xl:flex-col xl:justify-between xl:border-b-0 xl:border-r xl:pr-6 text-center w-full xl:w-auto flex justify-between items-center mb-6 xl:mb-0 px-4 xl:px-0 border-b border-border/50 pb-2 xl:pb-0 shrink-0 h-full py-2">
+
+    <!-- Top Section: Logo & Power Buttons -->
+    <div class="xl:flex xl:flex-row xl:justify-between xl:items-start w-full xl:gap-8 flex-1">
+      <div class="flex flex-col justify-between h-full w-full xl:w-auto">
+        <div class="xl:mb-4 order-1 xl:order-none text-left xl:text-left mr-auto xl:mr-0">
+          <h1 class="text-2xl xl:text-4xl font-black tracking-[0.3em] xl:tracking-[0.2em] text-primary drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)] m-0 leading-none" style="text-shadow: 0px 1px 0px rgba(255,255,255,0.2), 0px -1px 0px rgba(0,0,0,0.8);">NOISETTE</h1>
+          <p class="text-[8px] xl:text-[9px] uppercase tracking-[0.4em] text-secondary mt-1 xl:mt-2 font-mono">Reference Noise Generator</p>
+        </div>
       </div>
 
-      <div class="hidden xl:block text-left mt-auto">
-        <p class="text-[10px] font-mono text-secondary">MODEL N-01</p>
-        <p class="text-[8px] font-mono text-secondary opacity-60">AC 100V 50/60Hz</p>
-      </div>
-    </div>
+      <!-- Controls (Theme & Power) -->
+      <div class="flex flex-row items-center gap-6 shrink-0 order-2 xl:order-none xl:self-start xl:mr-2">
+        <!-- Theme Switch (Illumination) -->
+        <div class="flex flex-col items-center">
+          <button
+            class="w-8 h-8 xl:w-10 xl:h-10 rounded-full border border-black/40 bg-gradient-to-b from-[#f0f0f0] to-[#b0b0b0] shadow-[0_4px_6px_rgba(0,0,0,0.6),inset_0_1px_1px_rgba(255,255,255,0.4)] flex items-center justify-center transition-all active:scale-95 active:shadow-[0_1px_2px_rgba(0,0,0,0.5)] z-20 relative group"
+            onclick={toggleTheme}
+            aria-label="Toggle Illumination"
+          >
+            {#if isDark}
+              <Moon class="w-4 h-4 xl:w-5 xl:h-5 text-accent drop-shadow-[0_0_4px_var(--accent)]" />
+            {:else}
+              <Sun class="w-4 h-4 xl:w-5 xl:h-5 text-black/60 group-hover:text-black/80" />
+            {/if}
+          </button>
+          <span class="mt-2 text-[7px] xl:text-[8px] font-mono text-engraved tracking-widest z-10">ILLUMINATION</span>
+        </div>
 
-    <!-- Controls (Theme & Power) -->
-    <div class="flex flex-row items-center gap-6 shrink-0 order-2 xl:order-none xl:self-center xl:mr-2">
-
-      <!-- Theme Switch (Illumination) -->
-      <div class="flex flex-col items-center">
-        <button
-          class="w-8 h-8 xl:w-10 xl:h-10 rounded-full border border-black/40 bg-gradient-to-b from-[#f0f0f0] to-[#b0b0b0] shadow-[0_4px_6px_rgba(0,0,0,0.6),inset_0_1px_1px_rgba(255,255,255,0.4)] flex items-center justify-center transition-all active:scale-95 active:shadow-[0_1px_2px_rgba(0,0,0,0.5)] z-20 relative group"
-          onclick={toggleTheme}
-          aria-label="Toggle Illumination"
-        >
-          {#if isDark}
-            <Moon class="w-4 h-4 xl:w-5 xl:h-5 text-accent drop-shadow-[0_0_4px_var(--accent)]" />
-          {:else}
-            <Sun class="w-4 h-4 xl:w-5 xl:h-5 text-black/60 group-hover:text-black/80" />
-          {/if}
-        </button>
-        <span class="mt-2 text-[7px] xl:text-[8px] font-mono text-engraved tracking-widest z-10">ILLUMINATION</span>
-      </div>
-
-      <div class="flex flex-col items-center xl:gap-4 xl:-mb-14">
         <!-- Main Power Button -->
         <div class="flex flex-col items-center">
           <button
@@ -218,13 +214,21 @@
           </button>
           <span class="mt-2 text-[8px] xl:text-[10px] font-mono text-engraved tracking-widest z-10 transition-colors {isPlaying ? 'text-primary drop-shadow-[0_0_2px_rgba(212,175,55,0.3)]' : ''}">POWER</span>
         </div>
+      </div>
+    </div>
 
-        <!-- Spectrum Analyzer (Horizontal Only) -->
-        <div class="hidden xl:flex flex-col items-center mt-2 xl:mt-0 xl:translate-y-4">
-          {#if audioGen}
-            <SpectrumAnalyzer {audioGen} {isPlaying} />
-          {/if}
-        </div>
+    <!-- Bottom Section: Info & Spectrum Analyzer (Horizontal Only) -->
+    <div class="hidden xl:flex xl:flex-row xl:justify-between xl:items-end w-full mt-auto">
+      <div class="text-left mb-2">
+        <p class="text-[10px] font-mono text-secondary">MODEL N-01</p>
+        <p class="text-[8px] font-mono text-secondary opacity-60">AC 100V 50/60Hz</p>
+      </div>
+
+      <!-- Spectrum Analyzer (Horizontal Only) -->
+      <div class="flex flex-col items-center">
+        {#if audioGen}
+          <SpectrumAnalyzer {audioGen} {isPlaying} />
+        {/if}
       </div>
     </div>
   </div>

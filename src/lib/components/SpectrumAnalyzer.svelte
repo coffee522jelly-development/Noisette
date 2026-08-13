@@ -16,7 +16,7 @@
 
       ctx.clearRect(0, 0, width, height);
 
-      const numBands = 16;
+      const numBands = 32;
       const segments = 10;
       const gap = 2;
       const barWidth = width / numBands;
@@ -85,11 +85,11 @@
 </script>
 
 <div class="flex flex-col items-center">
-  <div class="relative w-32 h-16 bg-[#080808] border-[2px] border-border rounded shadow-[inset_0_2px_8px_rgba(0,0,0,0.9),0_1px_0_rgba(255,255,255,0.1)] p-1 flex items-center justify-center">
+  <div class="relative w-64 h-16 bg-[#080808] border-[2px] border-border rounded shadow-[inset_0_2px_8px_rgba(0,0,0,0.9),0_1px_0_rgba(255,255,255,0.1)] p-1 flex items-center justify-center">
     <!-- Grid texture overlay -->
     <div class="absolute inset-0 z-0 pointer-events-none rounded opacity-30" style="background-image: linear-gradient(0deg, transparent 24%, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.05) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, 0.05) 75%, rgba(255, 255, 255, 0.05) 76%, transparent 77%, transparent); background-size: 4px 4px;"></div>
 
-    <canvas bind:this={canvas} width="120" height="52" class="w-full h-full z-10 block"></canvas>
+    <canvas bind:this={canvas} width="240" height="52" class="w-full h-full z-10 block"></canvas>
 
     <!-- Glass Reflection Overlay -->
     <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-[rgba(255,255,255,0.02)] to-[rgba(255,255,255,0.1)] pointer-events-none z-20 mix-blend-screen rounded"></div>
