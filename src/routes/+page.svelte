@@ -160,12 +160,36 @@
 
   $effect(() => {
     if (isSettingsOpen && typeof navigator !== 'undefined' && navigator.mediaDevices) {
-      navigator.mediaDevices.enumerateDevices().then(devices => {
-        outputDevices = devices.filter(d => d.kind === 'audiooutput');
-        if (outputDevices.length > 0 && !selectedDeviceId) {
-          selectedDeviceId = outputDevices[0].deviceId;
+      const fetchDevices = async () => {
+        try {
+          let devices = await navigator.mediaDevices.enumerateDevices();
+          let outs = devices.filter(d => d.kind === 'audiooutput');
+
+          // If labels are empty, it means we don't have permission.
+          // Request mic permission temporarily to unlock device labels.
+          if (outs.length > 0 && outs[0].label === '') {
+            try {
+              const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+              // Stop tracks immediately so we don't actually record anything
+              stream.getTracks().forEach(track => track.stop());
+              // Re-enumerate now that permission is granted
+              devices = await navigator.mediaDevices.enumerateDevices();
+              outs = devices.filter(d => d.kind === 'audiooutput');
+            } catch (e) {
+              console.warn("User denied or failed to grant audio permission for device labels.", e);
+            }
+          }
+
+          outputDevices = outs;
+          if (outputDevices.length > 0 && !selectedDeviceId) {
+            selectedDeviceId = outputDevices[0].deviceId;
+          }
+        } catch (err) {
+          console.error("Error fetching devices:", err);
         }
-      }).catch(err => console.error("Error fetching devices:", err));
+      };
+
+      fetchDevices();
     }
   });
 </script>
