@@ -174,24 +174,24 @@
 <Dialog.Root bind:open={isSettingsOpen}>
   <Dialog.Content class="sm:max-w-[425px] bg-[#111] border-[#333] text-[#e0e0e0] font-mono rounded-none">
     <Dialog.Header>
-      <Dialog.Title class="text-[#f0f0f0] tracking-widest font-black uppercase border-b border-[#333] pb-2">Hardware Setup</Dialog.Title>
+      <Dialog.Title class="text-[#f0f0f0] tracking-widest font-black uppercase border-b border-[#333] pb-2">ハードウェア設定</Dialog.Title>
       <Dialog.Description class="text-[#888] text-xs pt-2">
-        Configure audio routing and internal parameters.
+        オーディオの出力先や内部パラメータを設定します。
       </Dialog.Description>
     </Dialog.Header>
     <div class="grid gap-4 py-4">
       <div class="flex flex-col gap-2">
-        <label for="output-device" class="text-xs text-[#aaa] tracking-widest uppercase">Audio Output Device</label>
+        <label for="output-device" class="text-xs text-[#aaa] tracking-widest uppercase">オーディオ出力デバイス</label>
         <select
           class="flex h-10 w-full rounded-none border border-[#444] bg-[#222] px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 text-[#f0f0f0]"
           bind:value={selectedDeviceId}
           onchange={(e) => handleDeviceSelect(e.currentTarget.value)}
         >
           {#if outputDevices.length === 0}
-            <option value="" disabled>No output devices found</option>
+            <option value="" disabled>出力デバイスが見つかりません</option>
           {/if}
           {#each outputDevices as device}
-            <option value={device.deviceId}>{device.label || 'Default Device'}</option>
+            <option value={device.deviceId}>{device.label || '既定のデバイス'}</option>
           {/each}
         </select>
       </div>
