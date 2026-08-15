@@ -5,7 +5,9 @@
   import Knob from '$lib/components/Knob.svelte';
   import SpectrumAnalyzer from '$lib/components/SpectrumAnalyzer.svelte';
   import { Switch } from '$lib/components/ui/switch';
-  import { Power, Sun, Moon } from '@lucide/svelte';
+  import * as Dialog from '$lib/components/ui/dialog';
+
+  import { Power, Sun, Moon, Settings } from '@lucide/svelte';
 
   let audioGen = $state<AudioGenerator>();
 
@@ -26,6 +28,9 @@
 
   // Theme state
   let isDark = $state(false);
+  let isSettingsOpen = $state(false);
+  let outputDevices = $state<MediaDeviceInfo[]>([]);
+  let selectedDeviceId = $state<string>('');
 
   let levels = $state({ left: 0, right: 0 });
   let animationFrame: number;
@@ -101,6 +106,13 @@
     isDark = !isDark;
   }
 
+  function handleDeviceSelect(deviceId: string) {
+    selectedDeviceId = deviceId;
+    if (audioGen) {
+      audioGen.setSinkId(deviceId);
+    }
+  }
+
   $effect(() => {
     if (typeof window !== 'undefined') {
       if (isDark) {
@@ -145,7 +157,71 @@
       }
     }
   });
+
+  $effect(() => {
+    if (isSettingsOpen && typeof navigator !== 'undefined' && navigator.mediaDevices) {
+      const fetchDevices = async () => {
+        try {
+          let devices = await navigator.mediaDevices.enumerateDevices();
+          let outs = devices.filter(d => d.kind === 'audiooutput');
+
+          // If labels are empty, it means we don't have permission.
+          // Request mic permission temporarily to unlock device labels.
+          if (outs.length > 0 && outs[0].label === '') {
+            try {
+              const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+              // Stop tracks immediately so we don't actually record anything
+              stream.getTracks().forEach(track => track.stop());
+              // Re-enumerate now that permission is granted
+              devices = await navigator.mediaDevices.enumerateDevices();
+              outs = devices.filter(d => d.kind === 'audiooutput');
+            } catch (e) {
+              console.warn("User denied or failed to grant audio permission for device labels.", e);
+            }
+          }
+
+          outputDevices = outs;
+          if (outputDevices.length > 0 && !selectedDeviceId) {
+            selectedDeviceId = outputDevices[0].deviceId;
+          }
+        } catch (err) {
+          console.error("Error fetching devices:", err);
+        }
+      };
+
+      fetchDevices();
+    }
+  });
 </script>
+
+<!-- Settings Dialog -->
+<Dialog.Root bind:open={isSettingsOpen}>
+  <Dialog.Content class="sm:max-w-[425px] bg-[#111] border-[#333] text-[#e0e0e0] font-mono rounded-none">
+    <Dialog.Header>
+      <Dialog.Title class="text-[#f0f0f0] tracking-widest font-black uppercase border-b border-[#333] pb-2">ハードウェア設定</Dialog.Title>
+      <Dialog.Description class="text-[#888] text-xs pt-2">
+        オーディオの出力先や内部パラメータを設定します。
+      </Dialog.Description>
+    </Dialog.Header>
+    <div class="grid gap-4 py-4">
+      <div class="flex flex-col gap-2">
+        <label for="output-device" class="text-xs text-[#aaa] tracking-widest uppercase">オーディオ出力デバイス</label>
+        <select
+          class="flex h-10 w-full rounded-none border border-[#444] bg-[#222] px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 text-[#f0f0f0]"
+          bind:value={selectedDeviceId}
+          onchange={(e) => handleDeviceSelect(e.currentTarget.value)}
+        >
+          {#if outputDevices.length === 0}
+            <option value="" disabled>出力デバイスが見つかりません</option>
+          {/if}
+          {#each outputDevices as device}
+            <option value={device.deviceId}>{device.label || '既定のデバイス'}</option>
+          {/each}
+        </select>
+      </div>
+    </div>
+  </Dialog.Content>
+</Dialog.Root>
 
 <!-- Chassis / Rack-mount Container -->
 <div class="flex flex-col xl:flex-row items-stretch justify-start w-full h-full xl:w-full xl:h-full mx-auto p-2 xl:p-4 bg-brushed border-x-[8px] xl:border-y-[8px] xl:border-x-[12px] border-[var(--surface)] shadow-[0_0_20px_rgba(0,0,0,0.8)] relative overflow-y-auto overflow-x-hidden gap-4 xl:gap-4 rounded-none xl:rounded-sm">
@@ -189,22 +265,35 @@
         </div>
       </div>
 
-      <!-- Controls (Theme & Power) -->
-      <div class="flex flex-row items-center gap-6 shrink-0 order-2 xl:order-none xl:self-start xl:mr-2">
+      <!-- Controls (Settings, Theme & Power) -->
+      <div class="flex flex-row items-center gap-4 xl:gap-6 shrink-0 order-2 xl:order-none xl:self-start xl:mr-2">
+
+        <!-- Settings Switch -->
+        <div class="flex flex-col items-center">
+          <button
+            class="w-10 h-10 xl:w-12 xl:h-12 rounded-full border border-black/40 bg-gradient-to-b from-[#f0f0f0] to-[#b0b0b0] shadow-[0_6px_8px_rgba(0,0,0,0.6),inset_0_1px_1px_rgba(255,255,255,0.4)] flex items-center justify-center transition-all active:scale-95 active:shadow-[0_1px_2px_rgba(0,0,0,0.5)] z-20 relative group"
+            onclick={() => isSettingsOpen = true}
+            aria-label="Settings"
+          >
+            <Settings class="w-5 h-5 xl:w-6 xl:h-6 text-black/60 group-hover:text-black/80" />
+          </button>
+          <span class="mt-2 text-[8px] xl:text-[10px] font-mono text-engraved tracking-widest z-10">SETUP</span>
+        </div>
+
         <!-- Theme Switch (Illumination) -->
         <div class="flex flex-col items-center">
           <button
-            class="w-8 h-8 xl:w-10 xl:h-10 rounded-full border border-black/40 bg-gradient-to-b from-[#f0f0f0] to-[#b0b0b0] shadow-[0_4px_6px_rgba(0,0,0,0.6),inset_0_1px_1px_rgba(255,255,255,0.4)] flex items-center justify-center transition-all active:scale-95 active:shadow-[0_1px_2px_rgba(0,0,0,0.5)] z-20 relative group"
+            class="w-10 h-10 xl:w-12 xl:h-12 rounded-full border border-black/40 bg-gradient-to-b from-[#f0f0f0] to-[#b0b0b0] shadow-[0_6px_8px_rgba(0,0,0,0.6),inset_0_1px_1px_rgba(255,255,255,0.4)] flex items-center justify-center transition-all active:scale-95 active:shadow-[0_1px_2px_rgba(0,0,0,0.5)] z-20 relative group"
             onclick={toggleTheme}
             aria-label="Toggle Illumination"
           >
             {#if isDark}
-              <Moon class="w-4 h-4 xl:w-5 xl:h-5 text-accent drop-shadow-[0_0_4px_var(--accent)]" />
+              <Moon class="w-5 h-5 xl:w-6 xl:h-6 text-accent drop-shadow-[0_0_4px_var(--accent)]" />
             {:else}
-              <Sun class="w-4 h-4 xl:w-5 xl:h-5 text-black/60 group-hover:text-black/80" />
+              <Sun class="w-5 h-5 xl:w-6 xl:h-6 text-black/60 group-hover:text-black/80" />
             {/if}
           </button>
-          <span class="mt-2 text-[7px] xl:text-[8px] font-mono text-engraved tracking-widest z-10">ILLUMINATION</span>
+          <span class="mt-2 text-[8px] xl:text-[10px] font-mono text-engraved tracking-widest z-10">ILLUMINATION</span>
         </div>
 
         <!-- Main Power Button -->
@@ -228,6 +317,15 @@
         {#if audioGen}
           <SpectrumAnalyzer {audioGen} {isPlaying} />
         {/if}
+        <!-- Filter Frequency Info -->
+        <span class="mb-1 text-[8px] font-mono text-engraved tracking-widest uppercase mt-4">LF/HF Freq</span>
+        <div class="flex flex-row justify-between w-64 bg-[#080808] border-[2px] border-border rounded shadow-[inset_0_2px_8px_rgba(0,0,0,0.9),0_1px_0_rgba(255,255,255,0.1)] px-2 py-1 relative overflow-hidden">
+          <!-- Glass Reflection Overlay -->
+          <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-[rgba(255,255,255,0.02)] to-[rgba(255,255,255,0.1)] pointer-events-none z-20 mix-blend-screen rounded"></div>
+
+          <span class="text-[9px] font-mono tracking-widest text-[#11ff11] drop-shadow-[0_0_4px_#11ff11] z-10"><span class="opacity-50">LC:</span> {highpass}Hz</span>
+          <span class="text-[9px] font-mono tracking-widest text-[#11ff11] drop-shadow-[0_0_4px_#11ff11] z-10"><span class="opacity-50">HC:</span> {lowpass}Hz</span>
+        </div>
       </div>
     </div>
   </div>

@@ -403,6 +403,20 @@ export class AudioGenerator {
     return dataArray;
   }
 
+
+  public async setSinkId(deviceId: string): Promise<void> {
+    if (!this.ctx) return;
+    if (typeof (this.ctx as any).setSinkId === 'function') {
+      try {
+        await (this.ctx as any).setSinkId(deviceId);
+      } catch (err) {
+        console.error("Failed to set sink ID:", err);
+      }
+    } else {
+      console.warn("setSinkId is not supported in this environment.");
+    }
+  }
+
   public getLevels(): { left: number, right: number } {
     if (!this.isPlaying || !this.analyserLeft || !this.analyserRight || !this.dataArrayLeft || !this.dataArrayRight) {
       return { left: 0, right: 0 };
